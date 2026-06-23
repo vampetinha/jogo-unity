@@ -22,7 +22,7 @@ public class ElementManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q)) AdicionarElemento(ElementoMagico.Agua);
         if (Input.GetKeyDown(KeyCode.W)) AdicionarElemento(ElementoMagico.Fogo);
-        if (Input.GetKeyDown(KeyCode.E)) AdicionarElemento(ElementoMagico.Terra);
+        if (Input.GetKeyDown(KeyCode.P)) AdicionarElemento(ElementoMagico.Terra);
         if (Input.GetKeyDown(KeyCode.R)) AdicionarElemento(ElementoMagico.Raio);
     }
 
