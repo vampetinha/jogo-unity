@@ -35,6 +35,12 @@ public class HUDManager : MonoBehaviour
     private Image      imagemFillBoss;
     private HealthSystem vidaBossConectada;
 
+    // Barra de calor (lança-chamas)
+    private Image               imagemFillCalor;
+    private TMP_Text            textoCalorStatus;
+    private GameObject          containerCalor;
+    private FlamethrowerAttack  lancaChamasConectado;
+
     // HUD jogável (oculto no menu principal)
     private GameObject containerHUD;
 
@@ -88,9 +94,22 @@ public class HUDManager : MonoBehaviour
         vidaConectada.aoReceberDano.AddListener(AtualizarVida);
         vidaConectada.aoMorrer.AddListener(MostrarGameOver);
 
-        // Inicializa a barra com o valor atual e exibe o HUD
         AtualizarVida(vidaConectada.VidaAtual, vidaConectada.VidaMaxima);
         if (containerHUD != null) containerHUD.SetActive(true);
+
+        // Conecta barra de calor ao FlamethrowerAttack (filho do player)
+        if (lancaChamasConectado != null)
+            lancaChamasConectado.onCalorAlterado.RemoveListener(AtualizarCalor);
+
+        lancaChamasConectado = playerObj.GetComponentInChildren<FlamethrowerAttack>();
+        if (lancaChamasConectado != null)
+        {
+            lancaChamasConectado.onCalorAlterado.AddListener(AtualizarCalor);
+            AtualizarCalor(lancaChamasConectado.CalorAtual, lancaChamasConectado.CalorMaximo);
+            if (containerCalor != null) containerCalor.SetActive(true);
+        }
+        else if (containerCalor != null)
+            containerCalor.SetActive(false);
     }
 
     private void AtualizarVida(float vidaAtual, float vidaMaxima)
@@ -201,9 +220,89 @@ public class HUDManager : MonoBehaviour
 
         CriarBarraDeVida(containerHUD);
         CriarContadorMoedas(containerHUD);
+        CriarBarraDeCalor(containerHUD);
         CriarBarraBoss(canvasObj);
         CriarPainelGameOver(canvasObj);
         CriarPainelVitoria(canvasObj);
+    }
+
+    // ── Barra de calor (lança-chamas) ───────────────────────────────
+
+    private void CriarBarraDeCalor(GameObject pai)
+    {
+        containerCalor = new GameObject("ContainerCalor");
+        containerCalor.transform.SetParent(pai.transform, false);
+        RectTransform rtC    = containerCalor.AddComponent<RectTransform>();
+        rtC.anchorMin        = new Vector2(1f, 0f);
+        rtC.anchorMax        = new Vector2(1f, 0f);
+        rtC.pivot            = new Vector2(1f, 0f);
+        rtC.anchoredPosition = new Vector2(-20f, 20f);
+        rtC.sizeDelta        = new Vector2(200f, 28f);
+
+        // Label acima da barra
+        GameObject labelObj  = new GameObject("LabelCalor");
+        labelObj.transform.SetParent(containerCalor.transform, false);
+        textoCalorStatus     = labelObj.AddComponent<TextMeshProUGUI>();
+        textoCalorStatus.text      = "PRONTO";
+        textoCalorStatus.fontSize  = 13f;
+        textoCalorStatus.color     = new Color(1f, 0.55f, 0f);
+        textoCalorStatus.alignment = TextAlignmentOptions.Right;
+        if (fonte != null) textoCalorStatus.font = fonte;
+        RectTransform rtL    = textoCalorStatus.rectTransform;
+        rtL.anchorMin        = new Vector2(0f, 1f);
+        rtL.anchorMax        = new Vector2(1f, 1f);
+        rtL.pivot            = new Vector2(0.5f, 0f);
+        rtL.anchoredPosition = new Vector2(0f, 2f);
+        rtL.sizeDelta        = new Vector2(0f, 18f);
+
+        // Fundo
+        GameObject bgObj = new GameObject("CalorFundo");
+        bgObj.transform.SetParent(containerCalor.transform, false);
+        Image bg = bgObj.AddComponent<Image>();
+        bg.color = new Color(0.15f, 0.05f, 0f);
+        Esticar(bg.rectTransform);
+
+        // Fill
+        GameObject fillObj       = new GameObject("CalorFill");
+        fillObj.transform.SetParent(containerCalor.transform, false);
+        imagemFillCalor            = fillObj.AddComponent<Image>();
+        imagemFillCalor.color      = new Color(1f, 0.55f, 0f);
+        imagemFillCalor.type       = Image.Type.Filled;
+        imagemFillCalor.fillMethod = Image.FillMethod.Horizontal;
+        imagemFillCalor.fillOrigin = 0;
+        imagemFillCalor.fillAmount = 1f;
+        Esticar(imagemFillCalor.rectTransform);
+
+        containerCalor.SetActive(false);
+    }
+
+    private void AtualizarCalor(float atual, float maximo)
+    {
+        if (imagemFillCalor == null || lancaChamasConectado == null) return;
+
+        float t = maximo > 0f ? atual / maximo : 0f;
+        imagemFillCalor.fillAmount = t;
+
+        if (lancaChamasConectado.EmRecarga)
+        {
+            imagemFillCalor.color = new Color(0.4f, 0.4f, 0.4f);
+            if (textoCalorStatus != null) textoCalorStatus.text = "SUPERAQUECIDO";
+        }
+        else if (lancaChamasConectado.Ativo)
+        {
+            imagemFillCalor.color = new Color(1f, 0.25f, 0f);
+            if (textoCalorStatus != null) textoCalorStatus.text = "ATIVO";
+        }
+        else if (t <= 0.3f)
+        {
+            imagemFillCalor.color = new Color(1f, 0.1f, 0.1f);
+            if (textoCalorStatus != null) textoCalorStatus.text = "RECARREGANDO";
+        }
+        else
+        {
+            imagemFillCalor.color = new Color(1f, 0.55f, 0f);
+            if (textoCalorStatus != null) textoCalorStatus.text = t >= 1f ? "PRONTO" : "RECARREGANDO";
+        }
     }
 
     // ── Barra de vida ────────────────────────────────────────────────
