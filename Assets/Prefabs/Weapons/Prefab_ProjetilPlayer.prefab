@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 751731859009131546}
   - component: {fileID: 8825018910394864786}
   - component: {fileID: 6134094423730488666}
-  - component: {fileID: 6193070462491881133}
+  - component: {fileID: 7263191614869754972}
   m_Layer: 0
   m_Name: Prefab_ProjetilPlayer
   m_TagString: Untagged
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 0.25943398, a: 1}
@@ -119,7 +119,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!58 &6134094423730488666
 CircleCollider2D:
@@ -156,8 +156,8 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
---- !u!114 &6193070462491881133
+  m_Radius: 0.15
+--- !u!114 &7263191614869754972
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,10 +166,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6325540760539372129}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c643aae9ae87e5740a1ff0735276d3d7, type: 3}
+  m_Script: {fileID: 11500000, guid: ac5197025a6e124438df62adce2867a1, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Projetil
-  velocidade: 10
-  tempoDeVida: 3
-  dano: 25
-  elemento: 0
+  m_EditorClassIdentifier: Assembly-CSharp::Projectile
