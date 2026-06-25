@@ -5,9 +5,24 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/MenuPrincipal.unity
+    guid: b844f19410b406446900d3b64fe85922
+  - enabled: 1
+    path: Assets/Scenes/FaseTerra.unity
+    guid: 9bbeeeb39dce4a54786b3cc435b05fd7
+  - enabled: 1
+    path: Assets/Scenes/FaseFortaleza.unity
+    guid: c8f4b7dca621a76498944f5938f73d2e
+  - enabled: 1
+    path: Assets/Scenes/FaseGoblins.unity
+    guid: 282ae75f2103d514e88e2c794fe01f2f
+  - enabled: 1
+    path: Assets/Scenes/FaseMarte.unity
+    guid: 30e01ec53a5259d499259af45870e0f2
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

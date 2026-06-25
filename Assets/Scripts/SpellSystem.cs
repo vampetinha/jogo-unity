@@ -5,40 +5,104 @@ public class SpellSystem : MonoBehaviour
     [Header("Configurações de Disparo")]
     public GameObject projetilPrefab;
 
-    private ElementManager elementManager;
+    [Tooltip("Local de onde a magia será criada")]
+    public Transform pontoDeDisparo;
 
-    void Start()
-    {
-        elementManager = GetComponent<ElementManager>();
-    }
+    [Header("Sistema de Elementos")]
+    public ElementManager elementManager;
 
-    void Update()
+    [Header("Lança-Chamas (Fogo)")]
+    [SerializeField] private FlamethrowerAttack lancaChamas;
+
+    private void Update()
     {
-        // 0 = Botão Esquerdo do Rato
-        if (Input.GetMouseButtonDown(0))
+        bool fogoSelecionado = elementManager != null &&
+                               elementManager.filaDeMagia.Count > 0 &&
+                               elementManager.filaDeMagia[0] == ElementoMagico.Fogo;
+
+        // Verdadeiro somente no frame em que o jogador pressiona 2
+        bool pressionouFogo = Input.GetKeyDown(KeyCode.Alpha2);
+
+        // Tecla 2: ativa o lança-chamas se a barra estiver pronta
+        if (pressionouFogo)
         {
-            AtirarMagia();
+            if (lancaChamas == null)
+                Debug.LogWarning("FlamethrowerAttack não atribuído no SpellSystem.");
+            else if (lancaChamas.PodeAtivar())
+                lancaChamas.Ativar();
+            else if (lancaChamas.EmRecarga)
+                Debug.Log("Superaquecido! Aguarde a barra recarregar.");
         }
+
+        // Desativa ao trocar de elemento — mas NUNCA no mesmo frame que ativou
+        // (fogoSelecionado ainda é false nesse frame porque o ElementManager
+        //  processa a tecla na sua própria ordem de execução)
+        if (!pressionouFogo && !fogoSelecionado && lancaChamas != null && lancaChamas.Ativo)
+            lancaChamas.Desativar();
+
+        // Projétil normal para Água, Terra e Vento (LMB)
+        if (!pressionouFogo && !fogoSelecionado && Input.GetMouseButtonDown(0))
+            AtirarMagia();
     }
 
-    void AtirarMagia()
+    private void AtirarMagia()
     {
-        if (elementManager.filaDeMagia.Count == 0) return;
+        if (elementManager == null)
+        {
+            Debug.LogError("Associe o ElementManager no SpellSystem.");
+            return;
+        }
 
-        // 1. DESCOBRIR A POSIÇÃO DO RATO
-        Vector3 posicaoRato = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (projetilPrefab == null)
+        {
+            Debug.LogError("Associe o Projetil Prefab no SpellSystem.");
+            return;
+        }
 
-        // 2. CALCULAR A DIREÇÃO (Do Mago até ao Rato)
-        Vector2 direcao = (posicaoRato - transform.position).normalized;
+        if (pontoDeDisparo == null)
+        {
+            Debug.LogError("Associe o Ponto de Disparo no SpellSystem.");
+            return;
+        }
 
-        // 3. CALCULAR O ÂNGULO EXATO
-        float angulo = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
-        Quaternion rotacaoParaORato = Quaternion.Euler(0, 0, angulo);
+        if (Camera.main == null)
+        {
+            Debug.LogError("A câmera principal precisa estar com a tag MainCamera.");
+            return;
+        }
 
-        // 4. CRIAR A MAGIA JÁ VIRADA PARA O RATO
-        GameObject novaMagia = Instantiate(projetilPrefab, transform.position, rotacaoParaORato);
+        // Nenhuma magia selecionada
+        if (elementManager.filaDeMagia.Count == 0)
+        {
+            Debug.Log("Selecione uma magia antes de atirar.");
+            return;
+        }
 
-        // Limpa a fila após atirar
+        ElementoMagico magiaUsada =
+            elementManager.filaDeMagia[0];
+
+        Vector3 posicaoRato =
+            Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        posicaoRato.z = 0f;
+
+        Vector2 direcao =
+            (posicaoRato - pontoDeDisparo.position).normalized;
+
+        float angulo =
+            Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+
+        Quaternion rotacao =
+            Quaternion.Euler(0f, 0f, angulo);
+
+        GameObject obj = Instantiate(projetilPrefab, pontoDeDisparo.position, rotacao);
+
+        Projetil projetil = obj.GetComponent<Projetil>();
+        if (projetil != null)
+            projetil.elemento = magiaUsada;
+
+        Debug.Log("Magia lançada: " + magiaUsada);
+
         elementManager.LimparFila();
     }
 }

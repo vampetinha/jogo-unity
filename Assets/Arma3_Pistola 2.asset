@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f56f9d0edbd24a43b0a98ed959972a0, type: 3}
+  m_Name: Arma3_Pistola 2
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  nomeArma: Espingarda
+  sprite: {fileID: 0}
+  tipoAtaque: 0
+  prefabProjetil: {fileID: 6325540760539372129, guid: 8507099c7e9811343a75368c1404727b, type: 3}
+  dano: 20
+  velocidadeProjetil: 13
+  alcance: 6
+  atravessaInimigos: 0
+  intervaloDisparo: 0.7
+  quantidadeProjeteis: 5
+  dispersao: 30

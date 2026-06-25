@@ -3,57 +3,53 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Atributos do Mago")]
-    public float velocidadeMovimento = 5f;
+    [Header("Movimento")]
+    public float velocidade = 5f;
 
     private Rigidbody2D rb;
-    private Vector2 destino;
-    private bool estaSeMovendo = false;
+    private float anguloAlvo;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
 
-        // O personagem começa parado na sua posição inicial
-        destino = rb.position;
+        // Impede que colisões girem o personagem involuntariamente
+        rb.angularDamping = 1000f;
     }
 
     void Update()
     {
-        // 1. CAPTURAR O CLIQUE (Botão Direito do Mouse)
-        if (Input.GetMouseButton(1))
-        {
-            // Converte a posição do mouse no ecrã para o mundo 2D
-            Vector3 posicaoClique = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            destino = new Vector2(posicaoClique.x, posicaoClique.y);
-            estaSeMovendo = true;
-        }
+        // Calcula o ângulo para o mouse a cada frame (alta taxa de atualização)
+        AtualizarAnguloMouse();
     }
 
     void FixedUpdate()
     {
-        // 2. MOVER O PERSONAGEM
-        if (estaSeMovendo)
-        {
-            // MoveTowards move o mago do ponto A ao B de forma suave
-            rb.position = Vector2.MoveTowards(rb.position, destino, velocidadeMovimento * Time.fixedDeltaTime);
+        Mover();
 
-            // 3. ROTACIONAR PARA ONDE ESTÁ A ANDAR
-            Vector2 direcaoOlhar = destino - rb.position;
+        // Aplica a rotação via Rigidbody para ser consistente com a física
+        rb.MoveRotation(anguloAlvo);
+    }
 
-            // Só roda se ainda estiver longe do destino (evita que fique a tremer)
-            if (direcaoOlhar.sqrMagnitude > 0.01f)
-            {
-                float angulo = Mathf.Atan2(direcaoOlhar.y, direcaoOlhar.x) * Mathf.Rad2Deg;
-                rb.rotation = angulo - 90f; // Ajuste para o sprite ficar de frente
-            }
+    private void Mover()
+    {
+        // Lê WASD e setas — diagonal normalizada evita velocidade extra na diagonal
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
 
-            // 4. PARAR AO CHEGAR
-            if (Vector2.Distance(rb.position, destino) < 0.1f)
-            {
-                estaSeMovendo = false;
-            }
-        }
+        Vector2 direcao = new Vector2(x, y).normalized;
+        rb.linearVelocity = direcao * velocidade;
+    }
+
+    private void AtualizarAnguloMouse()
+    {
+        if (Camera.main == null) return;
+
+        Vector3 posRato = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 direcao = (Vector2)posRato - (Vector2)transform.position;
+
+        // -90f ajusta para o sprite que aponta para cima por padrão
+        anguloAlvo = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg - 90f;
     }
 }

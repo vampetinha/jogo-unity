@@ -1,90 +1,113 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // LINHA NOVA: Necessária para controlar o texto no ecrã!
+using UnityEngine.UI;
 
-public enum ElementoMagico { Fogo, Agua, Terra, Raio }
+public enum ElementoMagico
+{
+    Fogo,
+    Agua,
+    Terra,
+    Vento
+}
 
 public class ElementManager : MonoBehaviour
 {
-    [Header("Configurações da Magia")]
-    public List<ElementoMagico> filaDeMagia = new List<ElementoMagico>();
-    public int limiteDeElementos = 3;
+    [Header("Magia selecionada")]
+    public List<ElementoMagico> filaDeMagia =
+        new List<ElementoMagico>();
 
-    [Header("Interface")]
-    public TextMeshProUGUI txtMagias; // LINHA NOVA: Referência para o nosso texto no ecrã
+    [Header("Slot da magia")]
+    public Image slotIcone;
 
-    void Start()
+    [Header("Ícones das Magias")]
+    public Sprite iconeFogo;
+    public Sprite iconeAgua;
+    public Sprite iconeTerra;
+    public Sprite iconeVento;
+
+    private void Start()
     {
-        AtualizarTexto(); // Garante que começa limpo
+        AtualizarSlot();
     }
 
-    void Update()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) AdicionarElemento(ElementoMagico.Agua);
-        if (Input.GetKeyDown(KeyCode.W)) AdicionarElemento(ElementoMagico.Fogo);
-        if (Input.GetKeyDown(KeyCode.P)) AdicionarElemento(ElementoMagico.Terra);
-        if (Input.GetKeyDown(KeyCode.R)) AdicionarElemento(ElementoMagico.Raio);
+        // 1/2/3/4 — sem conflito com WASD de movimento
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            SelecionarMagia(ElementoMagico.Agua);
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            SelecionarMagia(ElementoMagico.Fogo);
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            SelecionarMagia(ElementoMagico.Terra);
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            SelecionarMagia(ElementoMagico.Vento);
     }
 
-    void AdicionarElemento(ElementoMagico novoElemento)
+    private void SelecionarMagia(ElementoMagico elemento)
     {
-        // REGRA DE CANCELAMENTO (OPOSTOS)
-        if (novoElemento == ElementoMagico.Fogo && filaDeMagia.Contains(ElementoMagico.Agua))
-        {
-            filaDeMagia.Remove(ElementoMagico.Agua);
-            AtualizarTexto();
-            return;
-        }
-        if (novoElemento == ElementoMagico.Agua && filaDeMagia.Contains(ElementoMagico.Fogo))
-        {
-            filaDeMagia.Remove(ElementoMagico.Fogo);
-            AtualizarTexto();
-            return;
-        }
+        // Remove a magia anterior
+        filaDeMagia.Clear();
 
-        if (novoElemento == ElementoMagico.Terra && filaDeMagia.Contains(ElementoMagico.Raio))
-        {
-            filaDeMagia.Remove(ElementoMagico.Raio);
-            AtualizarTexto();
-            return;
-        }
-        if (novoElemento == ElementoMagico.Raio && filaDeMagia.Contains(ElementoMagico.Terra))
-        {
-            filaDeMagia.Remove(ElementoMagico.Terra);
-            AtualizarTexto();
-            return;
-        }
+        // Coloca somente uma magia no slot
+        filaDeMagia.Add(elemento);
 
-        // ADICIONAR À FILA
-        if (filaDeMagia.Count < limiteDeElementos)
-        {
-            filaDeMagia.Add(novoElemento);
-            AtualizarTexto(); // Atualiza o ecrã sempre que adiciona com sucesso
-        }
+        AtualizarSlot();
     }
 
     public void LimparFila()
     {
         filaDeMagia.Clear();
-        AtualizarTexto();
+        AtualizarSlot();
     }
 
-    // FUNÇÃO NOVA: Escreve a lista atual de magias no ecrã
-    void AtualizarTexto()
+    private void AtualizarSlot()
     {
-        if (txtMagias == null) return; // Evita erros se esquecer de associar
-
-        if (filaDeMagia.Count == 0)
+        if (slotIcone == null)
         {
-            txtMagias.text = "Elementos: [ Nenhum ]";
+            Debug.LogWarning(
+                "O Slot do ícone não foi associado no Inspector."
+            );
+
             return;
         }
 
-        string resultado = "Elementos: ";
-        foreach (var elemento in filaDeMagia)
+        // Nenhuma magia selecionada
+        if (filaDeMagia.Count == 0)
         {
-            resultado += "[" + elemento.ToString() + "] ";
+            slotIcone.sprite = null;
+            slotIcone.enabled = false;
+            return;
         }
-        txtMagias.text = resultado;
+
+        // Mostra a única magia selecionada
+        ElementoMagico elemento = filaDeMagia[0];
+
+        slotIcone.sprite = PegarIcone(elemento);
+        slotIcone.preserveAspect = true;
+        slotIcone.enabled = true;
+    }
+
+    private Sprite PegarIcone(ElementoMagico elemento)
+    {
+        switch (elemento)
+        {
+            case ElementoMagico.Fogo:
+                return iconeFogo;
+
+            case ElementoMagico.Agua:
+                return iconeAgua;
+
+            case ElementoMagico.Terra:
+                return iconeTerra;
+
+            case ElementoMagico.Vento:
+                return iconeVento;
+
+            default:
+                return null;
+        }
     }
 }
