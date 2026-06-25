@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   nomeArma: "Lan\xE7a-Chamas"
   sprite: {fileID: 0}
-  tipoAtaque: 0
-  prefabProjetil: {fileID: 6325540760539372129, guid: 8507099c7e9811343a75368c1404727b, type: 3}
+  tipoAtaque: 3
+  prefabProjetil: {fileID: 0}
   dano: 25
   velocidadeProjetil: 14
   alcance: 9

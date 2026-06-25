@@ -117,7 +117,10 @@ public class FlamethrowerAttack : MonoBehaviour
         onCalorAlterado?.Invoke(calorAtual, calorMaximo);
 
         if (emRecarga && calorAtual >= calorMaximo)
+        {
             emRecarga = false;
+            onCalorAlterado?.Invoke(calorAtual, calorMaximo);
+        }
     }
 
     // Retorna true se o lança-chamas pode ser ativado agora
@@ -172,8 +175,8 @@ public class FlamethrowerAttack : MonoBehaviour
 
         if (particulasChamas != null)
         {
-            float angulo = Mathf.Atan2(direcaoAtual.y, direcaoAtual.x) * Mathf.Rad2Deg;
-            particulasChamas.transform.rotation = Quaternion.Euler(0f, 0f, angulo);
+            Vector3 dir = new Vector3(direcaoAtual.x, direcaoAtual.y, 0f);
+            particulasChamas.transform.rotation = Quaternion.FromToRotation(Vector3.forward, dir);
         }
     }
 
