@@ -267,9 +267,7 @@ GameObject:
   - component: {fileID: 675729619}
   - component: {fileID: 675729618}
   - component: {fileID: 675729617}
-  - component: {fileID: 675729616}
   - component: {fileID: 675729615}
-  - component: {fileID: 675729614}
   - component: {fileID: 675729613}
   - component: {fileID: 675729612}
   - component: {fileID: 675729611}
@@ -325,9 +323,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c90709ddecfe484c9d3e06b2089284c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
-  armaAtual: {fileID: 0}
+  armaAtual: {fileID: 11400000, guid: d87b2cb3d6bc28746bcfa68d8c2e436c, type: 2}
   pontoDeDisparo: {fileID: 1747682553}
-  lancaChamas: {fileID: 0}
+  lancaChamas: {fileID: 824463222}
   somDisparo: {fileID: 0}
 --- !u!114 &675729613
 MonoBehaviour:
@@ -349,22 +347,6 @@ MonoBehaviour:
   aoMorrer:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &675729614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 675729609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08813574b13c2334988d70f0e4035341, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SpellSystem
-  projetilPrefab: {fileID: 6325540760539372129, guid: 8507099c7e9811343a75368c1404727b, type: 3}
-  pontoDeDisparo: {fileID: 1747682553}
-  elementManager: {fileID: 0}
-  lancaChamas: {fileID: 824463222}
 --- !u!114 &675729615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,24 +360,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   velocidade: 5
---- !u!114 &675729616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 675729609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1573a6922aa24854187cdbf165673f61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ElementManager
-  filaDeMagia: 
-  slotIcone: {fileID: 0}
-  iconeFogo: {fileID: 0}
-  iconeAgua: {fileID: 0}
-  iconeTerra: {fileID: 0}
-  iconeVento: {fileID: 0}
 --- !u!50 &675729617
 Rigidbody2D:
   serializedVersion: 5
@@ -545,7 +509,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FlamethrowerAttack
   pontoDeDisparo: {fileID: 1747682553}
   particulasChamas: {fileID: 1949209274}
-  elementManager: {fileID: 0}
   danoPorSegundo: 40
   intervaloEntreDanos: 0.2
   layerInimigos:
