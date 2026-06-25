@@ -12,9 +12,6 @@ public class EnemyController : MonoBehaviour
     public float danoDeAtaque = 10f;
     public float intervaloDeAtaque = 1f;
 
-    [Header("Elemento")]
-    public ElementoMagico elemento = ElementoMagico.Fogo;
-
     private Transform player;
     private Rigidbody2D rb;
     private float timerAtaque = 0f;

@@ -4,14 +4,11 @@ using UnityEngine.Events;
 public class FlamethrowerAttack : MonoBehaviour
 {
     [Header("Referências")]
-    [Tooltip("Ponto de onde as chamas saem (mesmo do SpellSystem)")]
+    [Tooltip("Ponto de onde as chamas saem")]
     public Transform pontoDeDisparo;
 
     [Tooltip("ParticleSystem filho do pontoDeDisparo")]
     public ParticleSystem particulasChamas;
-
-    [Tooltip("Necessário para desmarcar o Fogo quando o calor acaba")]
-    public ElementManager elementManager;
 
     // --- Dano ---
     [Header("Dano")]
@@ -130,7 +127,6 @@ public class FlamethrowerAttack : MonoBehaviour
         return !emRecarga;
     }
 
-    // Chamado pelo SpellSystem quando W é pressionado
     public void Ativar()
     {
         if (ativo) return;
@@ -143,7 +139,6 @@ public class FlamethrowerAttack : MonoBehaviour
             particulasChamas.Play();
     }
 
-    // Chamado pelo SpellSystem quando o jogador troca de elemento
     public void Desativar()
     {
         if (!ativo) return;
@@ -162,10 +157,6 @@ public class FlamethrowerAttack : MonoBehaviour
 
         if (particulasChamas != null && particulasChamas.isPlaying)
             particulasChamas.Stop();
-
-        // Remove o Fogo da fila para o ícone sumir e o jogador perceber que acabou
-        if (elementManager != null)
-            elementManager.LimparFila();
 
         Debug.Log("Lança-chamas superaquecido! Aguarde a barra recarregar.");
     }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6134094423730488666}
   - component: {fileID: 6193070462491881133}
   m_Layer: 0
-  m_Name: ProjetilBase
+  m_Name: Prefab_ProjetilPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
