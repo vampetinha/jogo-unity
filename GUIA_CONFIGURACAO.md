@@ -263,15 +263,7 @@ FaseTerra (cena)
    - **CapsuleCollider2D** — tamanho do personagem
    - **PlayerController** — `Velocidade = 5`
    - **HealthSystem** — `Vida Maxima = 100`
-   - **SpellSystem**:
-     - `Projetil Prefab` — prefab do Projetil das magias (script `Projetil.cs`)
-     - `Ponto De Disparo` — Transform filho (ver passo 3)
-     - `Element Manager` — arraste o próprio Player (componente ElementManager)
-     - `Lanca Chamas` — arraste o próprio Player (componente FlamethrowerAttack)
-   - **ElementManager**:
-     - `Slot Icone` — Image do Canvas da cena para exibir o ícone da magia
-     - Ícones: arraste sprites de fogo/água/terra/vento
-   - **FlamethrowerAttack** — configure no Inspector
+   - **FlamethrowerAttack** — configure no Inspector (usado apenas na FaseFortaleza)
    - **WeaponController**:
      - `Ponto De Disparo` — mesmo Transform filho abaixo
      - `Lanca Chamas` — arraste o componente FlamethrowerAttack do Player
@@ -281,11 +273,7 @@ FaseTerra (cena)
 
 3. Crie um **filho** do Player chamado `PontoDeDisparo`:
    - Posição local: `(0, 0.5, 0)` (um pouco à frente do centro)
-   - Arraste este Transform nos campos `Ponto De Disparo` do SpellSystem e do WeaponController
-
-4. **Conflito SpellSystem × WeaponController**:
-   - **FaseTerra**: pode deixar ambos ativos (SpellSystem: teclas 1–4 + LMB para magia; WeaponController: LMB para arma)
-   - **FaseMarte, FaseGoblins, FaseFortaleza**: desative o `SpellSystem` e o `ElementManager` no Inspector para evitar conflito de LMB
+   - Arraste este Transform no campo `Ponto De Disparo` do WeaponController
 
 ### E2. Montar uma Sala
 
@@ -423,7 +411,7 @@ public class CameraFollow : MonoBehaviour
 
 ### Cada cena de fase
 - [ ] Player com tag `Player`, layer `Player`
-- [ ] PontoDeDisparo como filho do Player, referenciado no WeaponController e SpellSystem
+- [ ] PontoDeDisparo como filho do Player, referenciado no WeaponController
 - [ ] Paredes com layer `Wall` e Collider2D **não-trigger**
 - [ ] Cada sala: BoxCollider2D trigger cobrindo o interior
 - [ ] Cada RoomController: arrays Portas, Spawners e Portal preenchidos
@@ -466,8 +454,6 @@ public class CameraFollow : MonoBehaviour
 | `MainMenuController` | MenuPrincipal > qualquer GO | Cria UI por código |
 | `PlayerController` | Player | Requer Rigidbody2D |
 | `HealthSystem` | Player, Inimigos, Boss | |
-| `SpellSystem` | Player | Desativar nas fases 2–4 |
-| `ElementManager` | Player | Desativar nas fases 2–4 |
 | `WeaponController` | Player | Requer PontoDeDisparo |
 | `FlamethrowerAttack` | Player | Usado pelo WeaponController (LancaChamas) |
 | `DamageFlash` | Player, Inimigos, Boss | Requer SpriteRenderer + HealthSystem |
