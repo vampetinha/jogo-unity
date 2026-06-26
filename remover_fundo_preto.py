@@ -1,7 +1,7 @@
 from PIL import Image
 import glob, os
 
-PASTA = r"C:\Users\junio\Downloads\jogo-unity\Assets\mapa"
+PASTA = r"D:\Jogo_Unity\jogo-unity\Assets\mapa"
 LIMIAR = 8  # só remove preto puro ou quase puro (não afeta cinza escuro do chão)
 
 arquivos = glob.glob(os.path.join(PASTA, "*.png"))
