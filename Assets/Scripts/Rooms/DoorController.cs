@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -10,11 +11,16 @@ public class DoorController : MonoBehaviour
     public Color corFechada = new Color(0.15f, 0.15f, 0.15f);
     public Color corAberta  = new Color(0.2f, 0.8f, 0.2f, 0f); // transparente
 
-    [Tooltip("Marque se a porta deve começar fechada (ex: portão inicial)")]
+    [Header("Comportamento")]
+    [Tooltip("Tempo em segundos antes de fechar após a sala ser ativada.")]
+    public float delayParaFechar = 0.6f;
+
+    [Tooltip("Marque se a porta deve começar fechada.")]
     public bool comecarFechada = false;
 
-    private Collider2D col;
+    private Collider2D    col;
     private SpriteRenderer sr;
+    private Coroutine      rotinaDeFechamento;
 
     void Awake()
     {
@@ -25,8 +31,17 @@ public class DoorController : MonoBehaviour
         else                Abrir();
     }
 
+    // ── API pública ───────────────────────────────
+
     public void Abrir()
     {
+        // Cancela qualquer fechamento pendente
+        if (rotinaDeFechamento != null)
+        {
+            StopCoroutine(rotinaDeFechamento);
+            rotinaDeFechamento = null;
+        }
+
         if (col != null) col.enabled = false;
         if (sr  != null) sr.color    = corAberta;
     }
@@ -35,5 +50,23 @@ public class DoorController : MonoBehaviour
     {
         if (col != null) col.enabled = true;
         if (sr  != null) sr.color    = corFechada;
+    }
+
+    /// <summary>
+    /// Fecha a porta após um pequeno delay, dando tempo do player entrar.
+    /// </summary>
+    public void FecharComDelay()
+    {
+        if (rotinaDeFechamento != null)
+            StopCoroutine(rotinaDeFechamento);
+
+        rotinaDeFechamento = StartCoroutine(RotinaFechar());
+    }
+
+    IEnumerator RotinaFechar()
+    {
+        yield return new WaitForSeconds(delayParaFechar);
+        Fechar();
+        rotinaDeFechamento = null;
     }
 }

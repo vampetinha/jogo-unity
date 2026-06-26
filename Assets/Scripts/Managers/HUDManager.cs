@@ -30,6 +30,10 @@ public class HUDManager : MonoBehaviour
     private GameObject painelGameOver;
     private GameObject painelVitoria;
 
+    // Ícone da arma atual
+    private Image           iconeArma;
+    private WeaponController armaConectada;
+
     // Boss health bar
     private GameObject painelBarraBoss;
     private Image      imagemFillBoss;
@@ -96,6 +100,17 @@ public class HUDManager : MonoBehaviour
 
         AtualizarVida(vidaConectada.VidaAtual, vidaConectada.VidaMaxima);
         if (containerHUD != null) containerHUD.SetActive(true);
+
+        // Conecta ícone da arma ao WeaponController
+        if (armaConectada != null)
+            armaConectada.onSpriteArmaAlterado.RemoveListener(AtualizarIconeArma);
+
+        armaConectada = playerObj.GetComponent<WeaponController>();
+        if (armaConectada != null)
+        {
+            armaConectada.onSpriteArmaAlterado.AddListener(AtualizarIconeArma);
+            AtualizarIconeArma(armaConectada.armaAtual?.sprite);
+        }
 
         // Conecta barra de calor ao FlamethrowerAttack (filho do player)
         if (lancaChamasConectado != null)
@@ -219,11 +234,53 @@ public class HUDManager : MonoBehaviour
         containerHUD.SetActive(false); // fica oculto até achar o Player
 
         CriarBarraDeVida(containerHUD);
+        CriarIconeArma(containerHUD);
         CriarContadorMoedas(containerHUD);
         CriarBarraDeCalor(containerHUD);
         CriarBarraBoss(canvasObj);
         CriarPainelGameOver(canvasObj);
         CriarPainelVitoria(canvasObj);
+    }
+
+    // ── Ícone da arma ───────────────────────────────────────────────
+
+    private void CriarIconeArma(GameObject pai)
+    {
+        GameObject container = new GameObject("ContainerArma");
+        container.transform.SetParent(pai.transform, false);
+        RectTransform rt     = container.AddComponent<RectTransform>();
+        rt.anchorMin         = new Vector2(0f, 1f);
+        rt.anchorMax         = new Vector2(0f, 1f);
+        rt.pivot             = new Vector2(0f, 1f);
+        rt.anchoredPosition  = new Vector2(20f, -52f); // logo abaixo da barra de vida
+        rt.sizeDelta         = new Vector2(44f, 44f);
+
+        // Fundo escuro
+        GameObject bgObj = new GameObject("Fundo");
+        bgObj.transform.SetParent(container.transform, false);
+        Image bg = bgObj.AddComponent<Image>();
+        bg.color = new Color(0.08f, 0.08f, 0.08f, 0.75f);
+        Esticar(bg.rectTransform);
+
+        // Ícone da arma (imagem com preserveAspect)
+        GameObject iconObj = new GameObject("IconeArma");
+        iconObj.transform.SetParent(container.transform, false);
+        iconeArma                  = iconObj.AddComponent<Image>();
+        iconeArma.color            = Color.white;
+        iconeArma.preserveAspect   = true;
+        iconeArma.enabled          = false; // fica oculto até ter sprite
+        RectTransform rtI          = iconeArma.rectTransform;
+        rtI.anchorMin              = new Vector2(0.1f, 0.1f);
+        rtI.anchorMax              = new Vector2(0.9f, 0.9f);
+        rtI.sizeDelta              = Vector2.zero;
+        rtI.anchoredPosition       = Vector2.zero;
+    }
+
+    private void AtualizarIconeArma(Sprite sprite)
+    {
+        if (iconeArma == null) return;
+        iconeArma.sprite  = sprite;
+        iconeArma.enabled = sprite != null;
     }
 
     // ── Barra de calor (lança-chamas) ───────────────────────────────

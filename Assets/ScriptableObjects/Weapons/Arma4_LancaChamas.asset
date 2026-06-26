@@ -10,16 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f56f9d0edbd24a43b0a98ed959972a0, type: 3}
-  m_Name: Arma1_Pistola
+  m_Name: Arma4_LancaChamas
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  nomeArma: Pistola
-  sprite: {fileID: 0}
-  tipoAtaque: 0
-  prefabProjetil: {fileID: 6325540760539372129, guid: 8507099c7e9811343a75368c1404727b, type: 3}
+  nomeArma: "Lan\xE7a-Chamas"
+  sprite: {fileID: 6852872145178223947, guid: 0d235a1efb532bd4cae8e173c1432923, type: 3}
+  escalaNaMao: 1
+  somDisparo: {fileID: 0}
+  tipoAtaque: 3
+  prefabProjetil: {fileID: 0}
   dano: 25
   velocidadeProjetil: 14
   alcance: 9
   atravessaInimigos: 0
-  intervaloDisparo: 0.3
+  intervaloDisparo: 0.1
   quantidadeProjeteis: 5
   dispersao: 30

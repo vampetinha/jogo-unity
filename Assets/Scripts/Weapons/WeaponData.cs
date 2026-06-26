@@ -16,8 +16,12 @@ public enum TipoAtaque
 public class WeaponData : ScriptableObject
 {
     [Header("Identificação")]
-    public string nomeArma = "Nova Arma";
-    public Sprite sprite;
+    public string    nomeArma   = "Nova Arma";
+    public Sprite    sprite;
+    [Tooltip("Tamanho do sprite da arma na mão do player")]
+    public float     escalaNaMao = 0.3f;
+    [Tooltip("Som tocado ao disparar")]
+    public AudioClip somDisparo;
 
     [Header("Tipo de Ataque")]
     public TipoAtaque tipoAtaque = TipoAtaque.Normal;
