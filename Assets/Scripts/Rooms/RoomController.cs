@@ -22,23 +22,33 @@ public class RoomController : MonoBehaviour
     [Tooltip("Arraste o BossController desta sala. Ele será ativado ao entrar.")]
     public BossController boss;
 
-    // Impede que a sala seja ativada mais de uma vez
     private bool ativada = false;
     private int inimigosVivos = 0;
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log($"[Sala] OnTriggerEnter2D: {other.name} | tag={other.tag} | ativada={ativada}");
         if (!ativada && other.CompareTag("Player"))
             AtivarSala();
+    }
+
+    // Fallback: captura o player que já estava dentro ao apertar Play
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (!ativada && other.CompareTag("Player"))
+        {
+            Debug.LogWarning("[Sala] Player já estava dentro ao iniciar — ativando pela sala.");
+            AtivarSala();
+        }
     }
 
     private void AtivarSala()
     {
         ativada = true;
 
-        // Fecha todas as portas
+        // Fecha todas as portas com delay para o player ter tempo de entrar
         foreach (DoorController porta in portas)
-            porta?.Fechar();
+            porta?.FecharComDelay();
 
         // Spawna todos os inimigos e conta quantos têm HealthSystem
         inimigosVivos = 0;

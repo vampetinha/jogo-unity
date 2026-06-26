@@ -59,11 +59,12 @@ public class FlamethrowerAttack : MonoBehaviour
         if (particulasChamas != null)
         {
             var main = particulasChamas.main;
-            main.playOnAwake = false;
-            main.loop = true;
+            main.playOnAwake  = false;
+            main.loop         = true;
             main.simulationSpace = ParticleSystemSimulationSpace.World;
+            // Evita flickering quando o emissor se move (órbita da arma)
+            main.cullingMode  = ParticleSystemCullingMode.AlwaysSimulate;
 
-            // Força parada imediata, mesmo que Play On Awake esteja marcado no Editor
             particulasChamas.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
     }

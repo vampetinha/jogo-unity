@@ -1,46 +1,63 @@
 using UnityEngine;
+using UnityEngine.Events;
 
-/// <summary>
-/// Controla o disparo da arma atual do jogador.
-/// Adicione ao GameObject do Player junto com PlayerController.
-/// A arma é trocada automaticamente pelo GameManager ao mudar de fase.
-/// </summary>
 public class WeaponController : MonoBehaviour
 {
     [Header("Arma Atual")]
     public WeaponData armaAtual;
 
     [Header("Referências")]
-    [Tooltip("Transform filho que marca de onde os projéteis saem")]
+    [Tooltip("Transform filho que representa a arma (orbita ao redor do player)")]
     public Transform pontoDeDisparo;
     [Tooltip("Necessário apenas quando tipoAtaque = LancaChamas")]
     public FlamethrowerAttack lancaChamas;
 
-    [Header("Áudio (opcional)")]
-    public AudioClip somDisparo;
+    [Header("Órbita da Arma")]
+    [Tooltip("Distância da arma ao centro do player")]
+    public float raioOrbita = 1f;
+
+    [Header("Visual da Arma na Mão")]
+    [Tooltip("SpriteRenderer filho do PontoDeDisparo que exibe o sprite da arma")]
+    public SpriteRenderer spriteNaMao;
+
+    // HUDManager escuta para atualizar o ícone
+    [HideInInspector]
+    public UnityEvent<Sprite> onSpriteArmaAlterado = new UnityEvent<Sprite>();
 
     private float timerDisparo = 0f;
 
+    void Start()
+    {
+        AtualizarVisual();
+    }
+
+    // Atualiza o visual quando armaAtual é trocada no Inspector (Editor e Play mode)
+    void OnValidate()
+    {
+        if (spriteNaMao == null || armaAtual == null) return;
+        spriteNaMao.sprite = armaAtual.sprite;
+        spriteNaMao.transform.localScale = Vector3.one * armaAtual.escalaNaMao;
+    }
+
     void Update()
     {
+        AtualizarOrbita();
+
         if (armaAtual == null) return;
         timerDisparo -= Time.deltaTime;
 
         switch (armaAtual.tipoAtaque)
         {
             case TipoAtaque.Normal:
-                if (Input.GetMouseButtonDown(0) && timerDisparo <= 0f)
-                    Disparar();
+                if (Input.GetMouseButtonDown(0) && timerDisparo <= 0f) Disparar();
                 break;
 
             case TipoAtaque.Automatico:
-                if (Input.GetMouseButton(0) && timerDisparo <= 0f)
-                    Disparar();
+                if (Input.GetMouseButton(0) && timerDisparo <= 0f) Disparar();
                 break;
 
             case TipoAtaque.Shotgun:
-                if (Input.GetMouseButtonDown(0) && timerDisparo <= 0f)
-                    DispararShotgun();
+                if (Input.GetMouseButtonDown(0) && timerDisparo <= 0f) DispararShotgun();
                 break;
 
             case TipoAtaque.LancaChamas:
@@ -51,7 +68,31 @@ public class WeaponController : MonoBehaviour
         }
     }
 
-    // ── Disparo Normal / Automático ─────────────────────────────────
+    // ── Órbita ──────────────────────────────────────────────────────
+
+    private void AtualizarOrbita()
+    {
+        if (Camera.main == null || pontoDeDisparo == null) return;
+
+        Vector3 posRato = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        posRato.z = 0f;
+
+        Vector2 direcao = ((Vector2)posRato - (Vector2)transform.position).normalized;
+
+        // Posiciona a arma no raio ao redor do player
+        pontoDeDisparo.position = (Vector2)transform.position + direcao * raioOrbita;
+
+        // Rotaciona a arma para apontar em direção ao mouse
+        float angulo = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+        pontoDeDisparo.rotation = Quaternion.Euler(0f, 0f, angulo);
+
+        // Vira o sprite verticalmente quando a arma aponta para a esquerda
+        // evita que o sprite apareça de cabeça pra baixo
+        if (spriteNaMao != null)
+            spriteNaMao.flipY = direcao.x < 0f;
+    }
+
+    // ── Disparo Normal / Automático ──────────────────────────────────
 
     private void Disparar()
     {
@@ -64,11 +105,11 @@ public class WeaponController : MonoBehaviour
             Quaternion.Euler(0f, 0f, angulo));
 
         ConfigurarProjetil(obj);
-        AudioManager.Instance?.PlaySFX(somDisparo);
+        AudioManager.Instance?.PlaySFX(armaAtual.somDisparo);
         timerDisparo = armaAtual.intervaloDisparo;
     }
 
-    // ── Disparo em Cone (Shotgun) ───────────────────────────────────
+    // ── Disparo em Cone (Shotgun) ────────────────────────────────────
 
     private void DispararShotgun()
     {
@@ -93,11 +134,11 @@ public class WeaponController : MonoBehaviour
             ConfigurarProjetil(obj);
         }
 
-        AudioManager.Instance?.PlaySFX(somDisparo);
+        AudioManager.Instance?.PlaySFX(armaAtual.somDisparo);
         timerDisparo = armaAtual.intervaloDisparo;
     }
 
-    // ── Auxiliares ──────────────────────────────────────────────────
+    // ── Auxiliares ───────────────────────────────────────────────────
 
     private void ConfigurarProjetil(GameObject obj)
     {
@@ -120,24 +161,37 @@ public class WeaponController : MonoBehaviour
 
     private bool VerificarReferencias()
     {
-        if (armaAtual.prefabProjetil == null)
+        if (armaAtual == null || armaAtual.prefabProjetil == null)
         {
-            Debug.LogWarning($"WeaponController: '{armaAtual.nomeArma}' não tem Prefab de Projétil!");
+            Debug.LogWarning($"WeaponController: sem prefab de projétil!");
             return false;
         }
         if (pontoDeDisparo == null)
         {
-            Debug.LogWarning("WeaponController: Ponto de Disparo não atribuído no Inspector!");
+            Debug.LogWarning("WeaponController: PontoDeDisparo não atribuído!");
             return false;
         }
         return true;
     }
 
-    // ── API pública (usada pelo GameManager) ────────────────────────
+    private void AtualizarVisual()
+    {
+        Sprite s = armaAtual != null ? armaAtual.sprite : null;
 
-    /// <summary>
-    /// Troca a arma ativa. Chamado pelo GameManager ao carregar nova fase.
-    /// </summary>
+        if (spriteNaMao != null)
+        {
+            spriteNaMao.sprite = s;
+
+            // Aplica o tamanho configurado no ScriptableObject da arma
+            if (armaAtual != null)
+                spriteNaMao.transform.localScale = Vector3.one * armaAtual.escalaNaMao;
+        }
+
+        onSpriteArmaAlterado?.Invoke(s);
+    }
+
+    // ── API pública ──────────────────────────────────────────────────
+
     public void TrocarArma(WeaponData novaArma)
     {
         if (lancaChamas != null && lancaChamas.Ativo)
@@ -145,5 +199,6 @@ public class WeaponController : MonoBehaviour
 
         armaAtual    = novaArma;
         timerDisparo = 0f;
+        AtualizarVisual();
     }
 }

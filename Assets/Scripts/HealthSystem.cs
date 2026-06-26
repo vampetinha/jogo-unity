@@ -20,8 +20,16 @@ public class HealthSystem : MonoBehaviour
         vidaAtual = vidaMaxima;
     }
 
+    private bool invencivel = false;
+
+    /// <summary>Enquanto invencível, todo dano é ignorado.</summary>
+    public void SetInvencivel(bool valor) => invencivel = valor;
+    public bool EstaInvencivel => invencivel;
+
     public void ReceberDano(float dano)
     {
+        if (invencivel) return;
+
         vidaAtual = Mathf.Max(0f, vidaAtual - dano);
         aoReceberDano?.Invoke(vidaAtual, vidaMaxima);
 
