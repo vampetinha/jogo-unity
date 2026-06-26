@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -18,8 +19,15 @@ public class AudioManager : MonoBehaviour
     public AudioClip musicaFase;
     public AudioClip musicaBoss;
 
+    [Header("Fade do Loop (metralhadora)")]
+    [Range(0f, 0.3f)] public float fadeDuracaoLoop  = 0.06f;
+    [Tooltip("Segundos a pular no início do clipe de loop (remove silêncio inicial)")]
+    [Range(0f, 1f)]   public float offsetInicioLoop = 0f;
+
     private AudioSource sfxSource;
     private AudioSource musicaSource;
+    private AudioSource sfxLoopSource;
+    private Coroutine   fadeLoopCoroutine;
 
     void Awake()
     {
@@ -31,6 +39,11 @@ public class AudioManager : MonoBehaviour
         sfxSource             = gameObject.AddComponent<AudioSource>();
         sfxSource.playOnAwake = false;
         sfxSource.loop        = false;
+
+        // SFX em loop (ex: metralhadora)
+        sfxLoopSource             = gameObject.AddComponent<AudioSource>();
+        sfxLoopSource.playOnAwake = false;
+        sfxLoopSource.loop        = true;
 
         // Música: loop contínuo
         musicaSource             = gameObject.AddComponent<AudioSource>();
@@ -59,6 +72,58 @@ public class AudioManager : MonoBehaviour
     }
 
     public void StopMusica() => musicaSource.Stop();
+
+    /// <summary>Inicia um SFX em loop com fade in suave.</summary>
+    public void PlaySFXLoop(AudioClip clip)
+    {
+        if (clip == null) return;
+        if (sfxLoopSource.clip == clip && sfxLoopSource.isPlaying) return;
+
+        if (fadeLoopCoroutine != null) StopCoroutine(fadeLoopCoroutine);
+
+        sfxLoopSource.clip   = clip;
+        sfxLoopSource.volume = 0f;
+        sfxLoopSource.Play();
+        if (offsetInicioLoop > 0f)
+            sfxLoopSource.time = Mathf.Min(offsetInicioLoop, clip.length - 0.01f);
+
+        fadeLoopCoroutine = StartCoroutine(FadeLoop(0f, volumeSFX, fadeDuracaoLoop));
+    }
+
+    /// <summary>Para o loop com fade out suave.</summary>
+    public void StopSFXLoop()
+    {
+        if (!sfxLoopSource.isPlaying) return;
+
+        if (fadeLoopCoroutine != null) StopCoroutine(fadeLoopCoroutine);
+        fadeLoopCoroutine = StartCoroutine(FadeOutAndStop());
+    }
+
+    private IEnumerator FadeLoop(float de, float para, float duracao)
+    {
+        float t = 0f;
+        while (t < duracao)
+        {
+            sfxLoopSource.volume = Mathf.Lerp(de, para, t / duracao);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        sfxLoopSource.volume = para;
+    }
+
+    private IEnumerator FadeOutAndStop()
+    {
+        float volumeInicial = sfxLoopSource.volume;
+        float t = 0f;
+        while (t < fadeDuracaoLoop)
+        {
+            sfxLoopSource.volume = Mathf.Lerp(volumeInicial, 0f, t / fadeDuracaoLoop);
+            t += Time.deltaTime;
+            yield return null;
+        }
+        sfxLoopSource.Stop();
+        sfxLoopSource.volume = volumeSFX;
+    }
 
     public void SetVolumeSFX(float v)
     {

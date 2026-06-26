@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Arma2_Metraladora
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   nomeArma: Metraladora
-  sprite: {fileID: 0}
+  sprite: {fileID: -8327877333999661900, guid: f31c5c49a5c1684418c82373064d7953, type: 3}
+  escalaNaMao: 0.5
+  somDisparo: {fileID: 8300000, guid: 6f28b383191e33347a180a0a207dca69, type: 3}
   tipoAtaque: 1
   prefabProjetil: {fileID: 6325540760539372129, guid: 8507099c7e9811343a75368c1404727b, type: 3}
+  spriteProjetil: {fileID: 0}
   dano: 15
   velocidadeProjetil: 16
   alcance: 10

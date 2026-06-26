@@ -53,6 +53,10 @@ public class WeaponController : MonoBehaviour
                 break;
 
             case TipoAtaque.Automatico:
+                if (Input.GetMouseButtonDown(0))
+                    AudioManager.Instance?.PlaySFXLoop(armaAtual.somDisparo);
+                if (Input.GetMouseButtonUp(0))
+                    AudioManager.Instance?.StopSFXLoop();
                 if (Input.GetMouseButton(0) && timerDisparo <= 0f) Disparar();
                 break;
 
@@ -105,7 +109,8 @@ public class WeaponController : MonoBehaviour
             Quaternion.Euler(0f, 0f, angulo));
 
         ConfigurarProjetil(obj);
-        AudioManager.Instance?.PlaySFX(armaAtual.somDisparo);
+        if (armaAtual.tipoAtaque != TipoAtaque.Automatico)
+            AudioManager.Instance?.PlaySFX(armaAtual.somDisparo);
         timerDisparo = armaAtual.intervaloDisparo;
     }
 
@@ -197,6 +202,7 @@ public class WeaponController : MonoBehaviour
     {
         if (lancaChamas != null && lancaChamas.Ativo)
             lancaChamas.Desativar();
+        AudioManager.Instance?.StopSFXLoop();
 
         armaAtual    = novaArma;
         timerDisparo = 0f;

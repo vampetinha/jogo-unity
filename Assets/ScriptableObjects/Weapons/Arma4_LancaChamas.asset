@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Arma4_LancaChamas
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   nomeArma: "Lan\xE7a-Chamas"
-  sprite: {fileID: 6852872145178223947, guid: 0d235a1efb532bd4cae8e173c1432923, type: 3}
+  sprite: {fileID: 5635991609229340457, guid: 538111fb61af98d489cb9371eed4ad9a, type: 3}
   escalaNaMao: 1
   somDisparo: {fileID: 0}
   tipoAtaque: 3
   prefabProjetil: {fileID: 0}
+  spriteProjetil: {fileID: 0}
   dano: 25
   velocidadeProjetil: 14
   alcance: 9

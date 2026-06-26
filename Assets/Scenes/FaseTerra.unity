@@ -3527,6 +3527,8 @@ MonoBehaviour:
   musicaMenu: {fileID: 0}
   musicaFase: {fileID: 0}
   musicaBoss: {fileID: 0}
+  fadeDuracaoLoop: 0
+  offsetInicioLoop: 1
 --- !u!4 &1466131215
 Transform:
   m_ObjectHideFlags: 0
