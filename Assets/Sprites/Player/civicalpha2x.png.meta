@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: f8adcc56dde2fdf4383790ca3d5b6543
+guid: 614f25598c104994a8ab04503f796d22
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -14269579591256480
-    second: ChatGPT Image 26 de jun. de 2026, 15_31_26 (3)_0
+      213: -5936104215893728976
+    second: civicalpha2x_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ChatGPT Image 26 de jun. de 2026, 15_31_26 (3)_0
+      name: civicalpha2x_0
       rect:
         serializedVersion: 2
-        x: 306
-        y: 157
-        width: 361
-        height: 1312
+        x: 23
+        y: 51
+        width: 170
+        height: 102
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0667e5994ed4dcff0800000000000000
-      internalID: -14269579591256480
+      spriteID: 031a4fd9aa8be9da0800000000000000
+      internalID: -5936104215893728976
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ChatGPT Image 26 de jun. de 2026, 15_31_26 (3)_0: -14269579591256480
+      civicalpha2x_0: -5936104215893728976
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

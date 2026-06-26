@@ -151,6 +151,8 @@ public class HUDManager : MonoBehaviour
     /// <summary>Exibe a tela de Game Over e pausa o jogo.</summary>
     public void MostrarGameOver()
     {
+        AudioManager.Instance?.StopSFXLoop();
+        AudioManager.Instance?.StopMusica();
         if (painelGameOver != null) painelGameOver.SetActive(true);
         Time.timeScale = 0f;
     }

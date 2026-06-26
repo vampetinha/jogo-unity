@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9109d048ce975114aa80ae086684435c
+guid: 56da7538016579b4a8a11e33c2e6e4a4
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -103,10 +103,10 @@ TextureImporter:
       name: ChatGPT Image 26 de jun. de 2026, 15_31_26 (1)_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 971
-        height: 1619
+        x: 280
+        y: 176
+        width: 411
+        height: 1282
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
