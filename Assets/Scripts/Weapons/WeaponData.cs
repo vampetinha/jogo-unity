@@ -28,6 +28,8 @@ public class WeaponData : ScriptableObject
 
     [Header("Projétil")]
     public GameObject prefabProjetil;
+    [Tooltip("Sprite visual do projétil (deixe vazio para usar o sprite do prefab)")]
+    public Sprite spriteProjetil;
     public float dano              = 25f;
     public float velocidadeProjetil = 12f;
     [Tooltip("Distância máxima percorrida antes de sumir")]

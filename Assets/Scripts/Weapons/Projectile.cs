@@ -21,14 +21,19 @@ public class Projectile : MonoBehaviour
     }
 
     /// <summary>Chamado pelo WeaponController imediatamente após Instantiate.</summary>
-    public void Configurar(float novoDano, float velocidade, float alcance, bool atravessa)
+    public void Configurar(float novoDano, float velocidade, float alcance, bool atravessa, Sprite sprite = null)
     {
         dano              = novoDano;
         atravessaInimigos = atravessa;
 
+        if (sprite != null)
+        {
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr != null) sr.sprite = sprite;
+        }
+
         rb.linearVelocity = transform.right * velocidade;
 
-        // Destrói automaticamente ao atingir o alcance máximo
         Destroy(gameObject, alcance / Mathf.Max(0.1f, velocidade));
     }
 

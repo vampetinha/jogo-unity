@@ -18,6 +18,7 @@ MonoBehaviour:
   somDisparo: {fileID: 8300000, guid: dc418cbc2f2874643aef081c12046ba4, type: 3}
   tipoAtaque: 0
   prefabProjetil: {fileID: 6325540760539372129, guid: 8507099c7e9811343a75368c1404727b, type: 3}
+  spriteProjetil: {fileID: 771854504688188697, guid: 62d79b99a20191a489b97c0378e0b443, type: 3}
   dano: 25
   velocidadeProjetil: 14
   alcance: 9

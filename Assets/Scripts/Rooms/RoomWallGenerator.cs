@@ -12,6 +12,14 @@ public class RoomWallGenerator : MonoBehaviour
     public Color  corChao    = new Color(0.22f, 0.55f, 0.22f);
     public int    ordemChao  = 0;
 
+    [Header("Posicionamento das Colisões de Parede")]
+    [Tooltip("Empurra cada parede para dentro da sala. Valor positivo = para dentro.")]
+    public float   insetParedes  = 0f;
+    [Tooltip("Desloca todas as paredes num eixo fixo (X/Y).")]
+    public Vector2 offsetParedes = Vector2.zero;
+    [HideInInspector] public float   insetAplicado  = 0f;
+    [HideInInspector] public Vector2 offsetAplicado = Vector2.zero;
+
     [Header("Largura da abertura do corredor")]
     public float larguraCorredor = 3f;
 
@@ -25,7 +33,6 @@ public class RoomWallGenerator : MonoBehaviour
 
     void OnValidate()
     {
-        // Atualiza o sprite e cor do Chao imediatamente ao mudar no Inspector
         Transform chaoTransform = transform.Find("Chao");
         if (chaoTransform == null) return;
 
@@ -46,7 +53,6 @@ public class RoomWallGenerator : MonoBehaviour
     [ContextMenu("Gerar Corredor (Chão + Paredes Laterais)")]
     public void GerarCorredor()
     {
-        // Remove chão e paredes existentes
         foreach (string n in new[] { "Chao", "Square" })
         {
             Transform t = transform.Find(n);
@@ -59,7 +65,6 @@ public class RoomWallGenerator : MonoBehaviour
                 DestroyImmediate(filho.gameObject);
         }
 
-        // Chão
         GameObject chao = new GameObject("Chao");
         chao.transform.SetParent(transform);
         chao.transform.localPosition = Vector3.zero;
@@ -69,7 +74,6 @@ public class RoomWallGenerator : MonoBehaviour
         sr.color        = corChao;
         sr.sortingOrder = ordemChao;
 
-        // Paredes laterais — apenas os dois lados compridos, extremidades ficam abertas
         float halfX = tamanhoCorredor.x / 2f;
         float halfY = tamanhoCorredor.y / 2f;
         const float esp = 0.3f;
@@ -77,13 +81,11 @@ public class RoomWallGenerator : MonoBehaviour
         bool horizontal = tamanhoCorredor.x >= tamanhoCorredor.y;
         if (horizontal)
         {
-            // Corredor na horizontal: paredes em cima e embaixo
             CriarParede("Parede_Cima",  new Vector2(0,  halfY), new Vector2(tamanhoCorredor.x, esp));
             CriarParede("Parede_Baixo", new Vector2(0, -halfY), new Vector2(tamanhoCorredor.x, esp));
         }
         else
         {
-            // Corredor na vertical: paredes à esquerda e direita
             CriarParede("Parede_Direita",  new Vector2( halfX, 0), new Vector2(esp, tamanhoCorredor.y));
             CriarParede("Parede_Esquerda", new Vector2(-halfX, 0), new Vector2(esp, tamanhoCorredor.y));
         }
@@ -99,17 +101,12 @@ public class RoomWallGenerator : MonoBehaviour
         BoxCollider2D col = GetComponent<BoxCollider2D>();
         if (col == null) { Debug.LogWarning($"{name}: precisa de BoxCollider2D."); return; }
 
-        // Garante que o pai não tem escala estranha
         transform.localScale = Vector3.one;
 
-        // Tamanho natural do sprite em unidades do mundo
         Vector2 tamanho = spriteChao.bounds.size;
-
-        // Ajusta o collider para cobrir o sprite
         col.size   = tamanho;
         col.offset = Vector2.zero;
 
-        // Regenera chão e paredes com o novo tamanho
         GerarTudo();
 
         Debug.Log($"{name}: sala ajustada para {tamanho.x:F2} x {tamanho.y:F2} unidades.");
@@ -122,13 +119,52 @@ public class RoomWallGenerator : MonoBehaviour
         GerarParedes();
     }
 
+    [ContextMenu("Aplicar Inset e Offset nas Paredes Existentes")]
+    public void AplicarNasParedes()
+    {
+        float   deltaInset  = insetParedes  - insetAplicado;
+        Vector2 deltaOffset = offsetParedes - offsetAplicado;
+
+        if (Mathf.Approximately(deltaInset, 0f) && deltaOffset == Vector2.zero)
+        {
+            Debug.Log($"{name}: inset/offset já estão aplicados.");
+            return;
+        }
+
+        int count = 0;
+        foreach (Transform filho in transform)
+        {
+            BoxCollider2D col = filho.GetComponent<BoxCollider2D>();
+            if (col == null || col.isTrigger) continue;
+
+            Vector2 pos = filho.localPosition;
+
+            if (!Mathf.Approximately(deltaInset, 0f) && pos != Vector2.zero)
+                filho.localPosition += (Vector3)((-pos.normalized) * deltaInset);
+
+            filho.localPosition += (Vector3)deltaOffset;
+            count++;
+        }
+
+        insetAplicado  = insetParedes;
+        offsetAplicado = offsetParedes;
+        Debug.Log($"{name}: inset {deltaInset:F2} + offset {deltaOffset} aplicados em {count} paredes.");
+    }
+
+    [ContextMenu("Resetar Inset e Offset das Paredes")]
+    public void ResetarNasParedes()
+    {
+        insetParedes  = 0f;
+        offsetParedes = Vector2.zero;
+        AplicarNasParedes();
+    }
+
     [ContextMenu("Gerar Chão")]
     public void GerarChao()
     {
         BoxCollider2D col = GetComponent<BoxCollider2D>();
         if (col == null) { Debug.LogWarning($"{name}: precisa de BoxCollider2D."); return; }
 
-        // Remove o chão anterior (pode ter nome "Chao" ou "Square")
         foreach (string nome in new[] { "Chao", "Square" })
         {
             Transform t = transform.Find(nome);
@@ -144,8 +180,6 @@ public class RoomWallGenerator : MonoBehaviour
         sr.color        = corChao;
         sr.sortingOrder = ordemChao;
 
-        // Se tem sprite personalizado, exibe no tamanho natural (PPU define a escala)
-        // Se é o quadrado padrão, estica para preencher o collider
         chao.transform.localScale = spriteChao != null
             ? Vector3.one
             : new Vector3(col.size.x, col.size.y, 1f);
@@ -168,10 +202,16 @@ public class RoomWallGenerator : MonoBehaviour
 
         float w = col.size.x, h = col.size.y, esp = 0.3f;
 
+        insetAplicado  = 0f;
+        offsetAplicado = Vector2.zero;
+
         GerarLado("Norte", Vector2.up    * h / 2f, new Vector2(w,   esp), aberturaNoRte,  true);
         GerarLado("Sul",   Vector2.down  * h / 2f, new Vector2(w,   esp), aberturaSul,    true);
         GerarLado("Leste", Vector2.right * w / 2f, new Vector2(esp, h  ), aberturaLeste,  false);
         GerarLado("Oeste", Vector2.left  * w / 2f, new Vector2(esp, h  ), aberturaOeste,  false);
+
+        if (!Mathf.Approximately(insetParedes, 0f) || offsetParedes != Vector2.zero)
+            AplicarNasParedes();
 
         Debug.Log($"{name}: paredes geradas.");
     }

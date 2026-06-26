@@ -4,10 +4,12 @@ using UnityEditor;
 
 public class CriadorDeSala : EditorWindow
 {
-    private Sprite spriteChao;
-    private string nomeSala   = "Sala";
-    private int    resolucao  = 32;   // precisão da detecção (32 = rápido e bom)
-    private float  espessura  = 0.25f;
+    private Sprite  spriteChao;
+    private string  nomeSala      = "Sala";
+    private int     resolucao     = 32;
+    private float   espessura     = 0.25f;
+    private float   insetParedes  = 0f;
+    private Vector2 offsetParedes = Vector2.zero;
 
     [MenuItem("Jogo/Criador de Sala")]
     public static void AbrirJanela() => GetWindow<CriadorDeSala>("Criador de Sala");
@@ -21,8 +23,11 @@ public class CriadorDeSala : EditorWindow
         spriteChao = (Sprite)EditorGUILayout.ObjectField("Sprite do Chão", spriteChao, typeof(Sprite), false);
 
         EditorGUILayout.Space();
-        resolucao = EditorGUILayout.IntSlider("Precisão das Paredes", resolucao, 16, 64);
-        espessura = EditorGUILayout.Slider("Espessura das Paredes", espessura, 0.1f, 0.5f);
+        resolucao     = EditorGUILayout.IntSlider("Precisão das Paredes", resolucao, 16, 64);
+        espessura     = EditorGUILayout.Slider("Espessura das Paredes", espessura, 0.1f, 0.5f);
+        insetParedes  = EditorGUILayout.Slider("Inset das Paredes", insetParedes, -1f, 2f);
+        offsetParedes = EditorGUILayout.Vector2Field("Offset das Paredes (X/Y fixo)", offsetParedes);
+        EditorGUILayout.HelpBox("Inset: empurra para dentro da sala.\nOffset: desloca todas as paredes num eixo fixo.", MessageType.None);
 
         EditorGUILayout.Space();
         GUI.enabled = spriteChao != null;
@@ -164,7 +169,13 @@ public class CriadorDeSala : EditorWindow
     {
         var go = new GameObject(nome);
         go.transform.SetParent(pai.transform);
-        go.transform.localPosition = new Vector3(pos.x, pos.y, 0f);
+
+        Vector2 posFinal = pos;
+        if (!Mathf.Approximately(insetParedes, 0f) && pos != Vector2.zero)
+            posFinal += (-pos.normalized) * insetParedes;
+        posFinal += offsetParedes;
+
+        go.transform.localPosition = new Vector3(posFinal.x, posFinal.y, 0f);
         go.transform.localScale    = Vector3.one;
         go.AddComponent<BoxCollider2D>().size = tam;
     }

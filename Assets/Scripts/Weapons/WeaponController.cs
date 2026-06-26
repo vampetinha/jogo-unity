@@ -148,7 +148,8 @@ public class WeaponController : MonoBehaviour
                 armaAtual.dano,
                 armaAtual.velocidadeProjetil,
                 armaAtual.alcance,
-                armaAtual.atravessaInimigos);
+                armaAtual.atravessaInimigos,
+                armaAtual.spriteProjetil);
     }
 
     private float AnguloParaMouse()
