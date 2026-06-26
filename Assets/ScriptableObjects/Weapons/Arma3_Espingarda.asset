@@ -13,9 +13,12 @@ MonoBehaviour:
   m_Name: Arma3_Espingarda
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   nomeArma: Espingarda
-  sprite: {fileID: 0}
+  sprite: {fileID: 9089837169129667387, guid: 0a5ac061b13b97947a548e4ba1eadf40, type: 3}
+  escalaNaMao: 0.3
+  somDisparo: {fileID: 0}
   tipoAtaque: 0
   prefabProjetil: {fileID: 6325540760539372129, guid: 8507099c7e9811343a75368c1404727b, type: 3}
+  spriteProjetil: {fileID: 0}
   dano: 20
   velocidadeProjetil: 13
   alcance: 6

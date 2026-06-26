@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Arma1_Pistola
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   nomeArma: Pistola
-  sprite: {fileID: 8126764594077157695, guid: 98666f18428bf3040b54a5078ce93220, type: 3}
+  sprite: {fileID: 4563001956290652025, guid: da1f064dd4f6c9f488dfe397df1b064e, type: 3}
   escalaNaMao: 0.3
   somDisparo: {fileID: 8300000, guid: dc418cbc2f2874643aef081c12046ba4, type: 3}
   tipoAtaque: 0
