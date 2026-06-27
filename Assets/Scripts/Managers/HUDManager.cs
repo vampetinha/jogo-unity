@@ -121,10 +121,9 @@ public class HUDManager : MonoBehaviour
         {
             lancaChamasConectado.onCalorAlterado.AddListener(AtualizarCalor);
             AtualizarCalor(lancaChamasConectado.CalorAtual, lancaChamasConectado.CalorMaximo);
-            if (containerCalor != null) containerCalor.SetActive(true);
         }
-        else if (containerCalor != null)
-            containerCalor.SetActive(false);
+        // A visibilidade da barra é controlada por AtualizarIconeArma ao trocar de arma
+        if (containerCalor != null) containerCalor.SetActive(false);
     }
 
     private void AtualizarVida(float vidaAtual, float vidaMaxima)
@@ -283,6 +282,10 @@ public class HUDManager : MonoBehaviour
         if (iconeArma == null) return;
         iconeArma.sprite  = sprite;
         iconeArma.enabled = sprite != null;
+
+        // Mostra a barra de calor só quando a arma ativa é o lança-chamas
+        if (containerCalor != null && armaConectada != null)
+            containerCalor.SetActive(armaConectada.armaAtual?.tipoAtaque == TipoAtaque.LancaChamas);
     }
 
     // ── Barra de calor (lança-chamas) ───────────────────────────────
