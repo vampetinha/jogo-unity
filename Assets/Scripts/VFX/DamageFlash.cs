@@ -38,6 +38,12 @@ public class DamageFlash : MonoBehaviour
         if (vida != null) vida.aoReceberDano.RemoveListener(AoReceberDano);
     }
 
+    public void CancelarFlash()
+    {
+        if (flashAtivo != null) { StopCoroutine(flashAtivo); flashAtivo = null; }
+        if (sr != null) sr.color = corOriginal;
+    }
+
     private void AoReceberDano(float atual, float maximo)
     {
         AudioManager.Instance?.PlaySFX(somDano);

@@ -105,7 +105,7 @@ public class AudioManager : MonoBehaviour
         while (t < duracao)
         {
             sfxLoopSource.volume = Mathf.Lerp(de, para, t / duracao);
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             yield return null;
         }
         sfxLoopSource.volume = para;
@@ -118,7 +118,7 @@ public class AudioManager : MonoBehaviour
         while (t < fadeDuracaoLoop)
         {
             sfxLoopSource.volume = Mathf.Lerp(volumeInicial, 0f, t / fadeDuracaoLoop);
-            t += Time.deltaTime;
+            t += Time.unscaledDeltaTime;
             yield return null;
         }
         sfxLoopSource.Stop();

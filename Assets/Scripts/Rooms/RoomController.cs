@@ -1,96 +1,119 @@
 using UnityEngine;
 
-/// <summary>
-/// Coloque no GameObject raiz da sala.
-/// Precisa de um BoxCollider2D com Is Trigger = true cobrindo o interior da sala.
-/// </summary>
 public class RoomController : MonoBehaviour
 {
+    [Header("Inimigos")]
+    [Tooltip("Prefabs dos inimigos que podem aparecer nesta sala.")]
+    public GameObject[] prefabsInimigos;
+    [Tooltip("Quantos inimigos spawnar ao entrar na sala.")]
+    public int quantidadeInimigos = 3;
+    [Tooltip("Margem interna para não spawnar rente às paredes.")]
+    public float margemParedes = 0.8f;
+
     [Header("Portas")]
-    [Tooltip("Arraste todas as portas desta sala.")]
     public DoorController[] portas;
 
-    [Header("Spawners")]
-    [Tooltip("Arraste todos os EnemySpawners desta sala.")]
-    public EnemySpawner[] spawners;
-
     [Header("Portal (somente na última sala da fase)")]
-    [Tooltip("Deixe vazio se não for a última sala.")]
     public PortalController portal;
 
     [Header("Boss (somente na sala do boss)")]
-    [Tooltip("Arraste o BossController desta sala. Ele será ativado ao entrar.")]
     public BossController boss;
+
+    [Header("Configuração")]
+    [Tooltip("Ative SOMENTE na sala onde o player começa. Nas demais deixe desativado.")]
+    public bool ativarSeJaDentro = false;
 
     private bool ativada = false;
     private int inimigosVivos = 0;
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"[Sala] OnTriggerEnter2D: {other.name} | tag={other.tag} | ativada={ativada}");
+        Debug.Log($"[{name}] TriggerEnter: {other.name} | tag={other.tag} | ativada={ativada}");
         if (!ativada && other.CompareTag("Player"))
             AtivarSala();
     }
 
-    // Fallback: captura o player que já estava dentro ao apertar Play
     void OnTriggerStay2D(Collider2D other)
     {
-        if (!ativada && other.CompareTag("Player"))
-        {
-            Debug.LogWarning("[Sala] Player já estava dentro ao iniciar — ativando pela sala.");
+        if (ativarSeJaDentro && !ativada && other.CompareTag("Player"))
             AtivarSala();
-        }
     }
 
     private void AtivarSala()
     {
         ativada = true;
+        Debug.Log($"[{name}] AtivarSala — prefabs={prefabsInimigos?.Length} qtd={quantidadeInimigos}");
 
-        // Fecha todas as portas com delay para o player ter tempo de entrar
         foreach (DoorController porta in portas)
             porta?.FecharComDelay();
 
-        // Spawna todos os inimigos e conta quantos têm HealthSystem
         inimigosVivos = 0;
-        foreach (EnemySpawner spawner in spawners)
-            inimigosVivos += spawner.Spawnar(this);
+        inimigosVivos += SpawnarInimigos();
+        Debug.Log($"[{name}] inimigosVivos={inimigosVivos}");
 
-        // Boss conta como um inimigo
         if (boss != null)
         {
             inimigosVivos++;
             boss.AtivarBoss();
         }
 
-        // Sala sem inimigos configurados: abre imediatamente
         if (inimigosVivos <= 0)
             SalaLimpa();
     }
 
-    /// <summary>
-    /// Chamado pelo EnemySpawner via evento quando um inimigo morre.
-    /// </summary>
+    private int SpawnarInimigos()
+    {
+        if (prefabsInimigos == null || prefabsInimigos.Length == 0 || quantidadeInimigos <= 0)
+            return 0;
+
+        BoxCollider2D col = GetComponent<BoxCollider2D>();
+        if (col == null)
+        {
+            Debug.LogWarning($"{name}: sem BoxCollider2D para spawnar inimigos.");
+            return 0;
+        }
+
+        Bounds b = col.bounds;
+        float xMin = b.min.x + margemParedes;
+        float xMax = b.max.x - margemParedes;
+        float yMin = b.min.y + margemParedes;
+        float yMax = b.max.y - margemParedes;
+
+        int contagem = 0;
+        for (int i = 0; i < quantidadeInimigos; i++)
+        {
+            GameObject prefab = prefabsInimigos[Random.Range(0, prefabsInimigos.Length)];
+            if (prefab == null) continue;
+
+            Vector2 pos = new Vector2(Random.Range(xMin, xMax), Random.Range(yMin, yMax));
+            GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
+
+            HealthSystem vida = obj.GetComponent<HealthSystem>();
+            if (vida != null)
+            {
+                vida.aoMorrer.AddListener(() => NotificarInimigoDerrotado());
+                contagem++;
+            }
+        }
+        return contagem;
+    }
+
     public void NotificarInimigoDerrotado()
     {
         inimigosVivos = Mathf.Max(0, inimigosVivos - 1);
-
         if (inimigosVivos <= 0)
             SalaLimpa();
     }
 
     private void SalaLimpa()
     {
-        // Abre todas as portas
         foreach (DoorController porta in portas)
             porta?.Abrir();
 
-        // Ativa o portal se esta for a última sala
         portal?.Ativar();
-
         Debug.Log($"Sala '{gameObject.name}' limpa!");
     }
 
-    // Retângulo verde no Editor para visualizar a área de trigger
     void OnDrawGizmos()
     {
         Collider2D col = GetComponent<Collider2D>();
