@@ -461,10 +461,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
+  prefabsInimigos: []
+  quantidadeInimigos: 3
+  margemParedes: 0.8
   portas: []
-  spawners: []
   portal: {fileID: 0}
   boss: {fileID: 0}
+  ativarSeJaDentro: 0
 --- !u!61 &55533945
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -499,7 +502,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.07354498}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -509,7 +512,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 14.02, y: 11.22}
+  m_Size: {x: 12.156853, y: 9.111701}
   m_EdgeRadius: 0
 --- !u!4 &55533946
 Transform:
@@ -871,37 +874,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.25, y: 2.1906252}
   m_EdgeRadius: 0
---- !u!1 &151267264
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 151267265}
-  m_Layer: 0
-  m_Name: SpawnPt_01 (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &151267265
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 151267264}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.53, y: -1.55, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1232401499}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &167663882
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,11 +1216,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
+  prefabsInimigos: []
+  quantidadeInimigos: 3
+  margemParedes: 0.8
   portas:
   - {fileID: 0}
-  spawners: []
   portal: {fileID: 0}
   boss: {fileID: 0}
+  ativarSeJaDentro: 0
 --- !u!61 &291179282
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1283,7 +1258,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.08529949, y: -1.1941934}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1293,7 +1268,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 14.48, y: 10.86}
+  m_Size: {x: 10.556223, y: 5.6282988}
   m_EdgeRadius: 0
 --- !u!4 &291179283
 Transform:
@@ -1584,10 +1559,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
+  prefabsInimigos: []
+  quantidadeInimigos: 3
+  margemParedes: 0.8
   portas: []
-  spawners: []
   portal: {fileID: 0}
   boss: {fileID: 0}
+  ativarSeJaDentro: 0
 --- !u!61 &335841119
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1622,7 +1600,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.15430737, y: 0.46292257}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1632,7 +1610,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 11.22, y: 14.02}
+  m_Size: {x: 10.294157, y: 12.230033}
   m_EdgeRadius: 0
 --- !u!4 &335841120
 Transform:
@@ -3935,37 +3913,6 @@ MonoBehaviour:
   velocidadePulso: 1.2
   flipAtivo: 1
   duracaoMorte: 0.45
---- !u!1 &682600506
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 682600507}
-  m_Layer: 0
-  m_Name: SpawnPt_01 (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &682600507
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 682600506}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3, y: 2.47, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1232401499}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &692895286
 GameObject:
   m_ObjectHideFlags: 0
@@ -4620,10 +4567,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
+  prefabsInimigos: []
+  quantidadeInimigos: 3
+  margemParedes: 0.8
   portas: []
-  spawners: []
   portal: {fileID: 0}
   boss: {fileID: 0}
+  ativarSeJaDentro: 0
 --- !u!61 &766598406
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4658,7 +4608,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.061723232, y: 0.15404129}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4668,7 +4618,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 4.11, y: 12.82}
+  m_Size: {x: 3.73984, y: 12.511917}
   m_EdgeRadius: 0
 --- !u!4 &766598407
 Transform:
@@ -7157,62 +7107,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.91875, y: 0.25}
   m_EdgeRadius: 0
---- !u!1 &1232401498
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1232401499}
-  - component: {fileID: 1232401500}
-  m_Layer: 0
-  m_Name: Spawner_01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1232401499
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232401498}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.0034004254, y: -0, z: -0, w: 0.9999942}
-  m_LocalPosition: {x: -0.37165022, y: 0.64, z: 0.09}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1834737746}
-  - {fileID: 151267265}
-  - {fileID: 682600507}
-  - {fileID: 1956250163}
-  m_Father: {fileID: 1732845987}
-  m_LocalEulerAnglesHint: {x: 0.39, y: 0, z: 0}
---- !u!114 &1232401500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232401498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f82520a3234906b418bd7b6ed4a35703, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  prefabsInimigos:
-  - {fileID: 5130721117966796335, guid: 4ef35a9a728d29148a2a51ba9b8e6426, type: 3}
-  - {fileID: 5130721117966796335, guid: 8d192371af2d9d74b93fee4dbf7357c2, type: 3}
-  pontosDeSpawn:
-  - {fileID: 1834737746}
-  - {fileID: 151267265}
-  - {fileID: 682600507}
-  - {fileID: 1956250163}
 --- !u!1 &1236232473
 GameObject:
   m_ObjectHideFlags: 0
@@ -10532,13 +10426,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
+  prefabsInimigos: []
+  quantidadeInimigos: 3
+  margemParedes: 0.8
   portas:
   - {fileID: 886928714}
   - {fileID: 483359544}
-  spawners:
-  - {fileID: 1232401500}
   portal: {fileID: 0}
   boss: {fileID: 0}
+  ativarSeJaDentro: 0
 --- !u!61 &1732845986
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10573,7 +10469,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.07811117, y: 0.32682204}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -10583,7 +10479,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 12.54, y: 12.54}
+  m_Size: {x: 5.71828, y: 12.511246}
   m_EdgeRadius: 0
 --- !u!4 &1732845987
 Transform:
@@ -10601,7 +10497,6 @@ Transform:
   - {fileID: 1664814512}
   - {fileID: 886928713}
   - {fileID: 483359543}
-  - {fileID: 1232401499}
   - {fileID: 507036699}
   - {fileID: 2135994550}
   - {fileID: 1009289684}
@@ -11281,37 +11176,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.25, y: 2.743125}
   m_EdgeRadius: 0
---- !u!1 &1834737745
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1834737746}
-  m_Layer: 0
-  m_Name: SpawnPt_01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1834737746
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1834737745}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.17, y: -2.92, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1232401499}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1852222260
 GameObject:
   m_ObjectHideFlags: 0
@@ -16395,37 +16259,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!1 &1956250162
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1956250163}
-  m_Layer: 0
-  m_Name: SpawnPt_01 (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1956250163
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1956250162}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.17, y: 2.11, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1232401499}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1974132350
 GameObject:
   m_ObjectHideFlags: 0
@@ -16457,10 +16290,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
+  prefabsInimigos:
+  - {fileID: 5130721117966796335, guid: 4b0c52873c991804daac5569c6a02cc7, type: 3}
+  quantidadeInimigos: 2
+  margemParedes: 0.8
   portas: []
-  spawners: []
   portal: {fileID: 0}
   boss: {fileID: 0}
+  ativarSeJaDentro: 0
 --- !u!61 &1974132352
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -16495,7 +16332,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.07811165, y: 0.07811117}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -16505,7 +16342,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 12.54, y: 12.54}
+  m_Size: {x: 9.57177, y: 9.467622}
   m_EdgeRadius: 0
 --- !u!4 &1974132353
 Transform:
