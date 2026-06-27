@@ -150,11 +150,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuController
   nomePrimeiraFase: FaseTerra
   nomeDimensaoInicial: TERRA
-  nomeTitulo: "DIMENS\xD5ES\nDO CAOS"
-  subtitulo: "Um roguelike de explora\xE7\xE3o dimensional"
-  textoCreditos: "<size=36><b>CR\xC9DITOS</b></size>\n\n<size=22>Desenvolvido para
-    a disciplina de Jogos Digitais\n\nPrograma\xE7\xE3o e Design: [Seu Nome]\n\nEngine:
-    Unity 6\n\n<i>Pressione ESC ou clique para fechar</i></size>"
+  spriteBackground: {fileID: -5663136148644741059, guid: 35444cc55b831294aab85923186610a4, type: 3}
+  spriteMenuName: {fileID: -7379661067922200640, guid: fae264ac3b71f9f4799731d125f174c4, type: 3}
+  spriteBtnStart: {fileID: -4736947021416864802, guid: e106de855583af64a873709f74301274, type: 3}
+  spriteBtnStartHover: {fileID: 1897964191252370843, guid: c2c69984e609b2c4781a40b4e0a39501, type: 3}
+  spriteBtnCredits: {fileID: -5234593660443813403, guid: ff137c167c4138141b53a7329b4c4daf, type: 3}
+  spriteBtnCreditsHover: {fileID: 2208564978689007308, guid: ce96f69a2b8da1444a5469ef7669abbb, type: 3}
+  spriteBtnLeave: {fileID: -7634566476841158784, guid: b45acbc0420dd8843a84b4929e2dd4c7, type: 3}
+  spriteBtnLeaveHover: {fileID: 8031966246846180862, guid: 4683dfde5aa0ab049a2a36ff1a75225b, type: 3}
+  painelCreditosExterno: {fileID: 0}
+  tituloAmplitude: 5
+  tituloVelocidade: 0.6
   fonte: {fileID: 0}
 --- !u!4 &333579616
 Transform:
@@ -389,6 +395,8 @@ MonoBehaviour:
   musicaMenu: {fileID: 0}
   musicaFase: {fileID: 0}
   musicaBoss: {fileID: 0}
+  fadeDuracaoLoop: 0.06
+  offsetInicioLoop: 0
 --- !u!4 &1358906176
 Transform:
   m_ObjectHideFlags: 0
