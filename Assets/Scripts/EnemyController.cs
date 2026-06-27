@@ -14,7 +14,8 @@ public class EnemyController : MonoBehaviour
 
     private Transform player;
     private Rigidbody2D rb;
-    private float timerAtaque = 0f;
+    private float timerAtaque    = 0f;
+    private float timerKnockback = 0f;
 
     void Start()
     {
@@ -43,6 +44,9 @@ public class EnemyController : MonoBehaviour
     {
         if (player == null) return;
 
+        timerKnockback -= Time.fixedDeltaTime;
+        if (timerKnockback > 0f) return;
+
         if (DistanciaAoPlayer() > distanciaDeAtaque)
         {
             Vector2 direcao = ((Vector2)player.position - rb.position).normalized;
@@ -51,6 +55,13 @@ public class EnemyController : MonoBehaviour
             float angulo = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
             rb.rotation = angulo - 90f;
         }
+    }
+
+    public void AplicarKnockback(Vector2 forca)
+    {
+        rb.linearVelocity = Vector2.zero;
+        rb.AddForce(forca, ForceMode2D.Impulse);
+        timerKnockback = 0.25f;
     }
 
     private void Atacar()

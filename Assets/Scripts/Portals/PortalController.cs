@@ -1,15 +1,17 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-/// <summary>
-/// Coloque no GameObject do portal.
-/// Precisa de: SpriteRenderer + Collider2D (Is Trigger) + opcional ParticleSystem.
-/// O RoomController chama Ativar() quando a sala for limpa.
-/// </summary>
 public class PortalController : MonoBehaviour
 {
     [Header("Próxima Fase")]
-    [Tooltip("Nome EXATO da Scene a carregar (igual ao nome no Build Settings).")]
+#if UNITY_EDITOR
+    [Tooltip("Arraste a Scene aqui.")]
+    public SceneAsset proximaSceneAsset;
+#endif
+    [HideInInspector]
     public string proximaScene = "";
 
     [Tooltip("Nome da dimensão exibido na tela ao entrar (ex: 'MARTE'). Deixe vazio para não exibir.")]
@@ -18,12 +20,24 @@ public class PortalController : MonoBehaviour
     [Tooltip("Arma que o jogador receberá ao entrar nessa fase. Deixe vazio para manter a arma atual.")]
     public WeaponData armaProximaFase;
 
+    [Header("Detecção")]
+    [Tooltip("Raio em unidades para detectar o player")]
+    public float raioDeteccao = 1.2f;
+
     [Header("Referências")]
     public ParticleSystem particulas;
 
     private bool ativo = false;
     private SpriteRenderer sr;
     private Collider2D col;
+
+    void OnValidate()
+    {
+#if UNITY_EDITOR
+        if (proximaSceneAsset != null)
+            proximaScene = proximaSceneAsset.name;
+#endif
+    }
 
     void Awake()
     {
@@ -40,9 +54,12 @@ public class PortalController : MonoBehaviour
         Debug.Log($"Portal ativado! Próxima cena: {proximaScene}");
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void Update()
     {
-        if (ativo && other.CompareTag("Player"))
+        if (!ativo) return;
+
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, raioDeteccao);
+        if (hit != null && hit.CompareTag("Player"))
             UsarPortal();
     }
 

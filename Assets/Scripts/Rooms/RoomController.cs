@@ -9,6 +9,10 @@ public class RoomController : MonoBehaviour
     public int quantidadeInimigos = 3;
     [Tooltip("Margem interna para não spawnar rente às paredes.")]
     public float margemParedes = 0.8f;
+    [Tooltip("Distância mínima do player para spawnar (em unidades). 0 = sem restrição.")]
+    public float distanciaMinimaDaPlayer = 5f;
+    [Tooltip("Tentativas máximas para achar posição longe o suficiente do player.")]
+    public int tentativasMaximas = 30;
 
     [Header("Portas")]
     public DoorController[] portas;
@@ -79,13 +83,33 @@ public class RoomController : MonoBehaviour
         float yMin = b.min.y + margemParedes;
         float yMax = b.max.y - margemParedes;
 
+        Transform playerTransform = null;
+        if (distanciaMinimaDaPlayer > 0f)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null) playerTransform = playerObj.transform;
+        }
+
         int contagem = 0;
         for (int i = 0; i < quantidadeInimigos; i++)
         {
             GameObject prefab = prefabsInimigos[Random.Range(0, prefabsInimigos.Length)];
             if (prefab == null) continue;
 
-            Vector2 pos = new Vector2(Random.Range(xMin, xMax), Random.Range(yMin, yMax));
+            Vector2 pos = Vector2.zero;
+            bool posicaoValida = false;
+            for (int tentativa = 0; tentativa < tentativasMaximas; tentativa++)
+            {
+                pos = new Vector2(Random.Range(xMin, xMax), Random.Range(yMin, yMax));
+                if (playerTransform == null || Vector2.Distance(pos, playerTransform.position) >= distanciaMinimaDaPlayer)
+                {
+                    posicaoValida = true;
+                    break;
+                }
+            }
+            if (!posicaoValida)
+                Debug.LogWarning($"{name}: não achou posição longe do player após {tentativasMaximas} tentativas.");
+
             GameObject obj = Instantiate(prefab, pos, Quaternion.identity);
 
             HealthSystem vida = obj.GetComponent<HealthSystem>();

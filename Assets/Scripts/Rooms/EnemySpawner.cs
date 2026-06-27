@@ -11,6 +11,10 @@ public class EnemySpawner : MonoBehaviour
     public int quantidadeAleatoria = 3;
     [Tooltip("Margem interna para evitar spawnar rente às paredes (em unidades).")]
     public float margemParedes = 0.8f;
+    [Tooltip("Distância mínima do player para spawnar (em unidades). 0 = sem restrição.")]
+    public float distanciaMinimaDaPlayer = 5f;
+    [Tooltip("Tentativas máximas para achar posição longe o suficiente do player.")]
+    public int tentativasMaximas = 30;
 
     [Header("Pontos Manuais (opcional)")]
     [Tooltip("Se preenchido, usa esses pontos em vez de posições aleatórias.")]
@@ -55,13 +59,33 @@ public class EnemySpawner : MonoBehaviour
         float yMin = bounds.min.y + margemParedes;
         float yMax = bounds.max.y - margemParedes;
 
+        Transform playerTransform = null;
+        if (distanciaMinimaDaPlayer > 0f)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null) playerTransform = playerObj.transform;
+        }
+
         int contagem = 0;
         for (int i = 0; i < quantidadeAleatoria; i++)
         {
-            Vector2 pos = new Vector2(
-                Random.Range(xMin, xMax),
-                Random.Range(yMin, yMax)
-            );
+            Vector2 pos = Vector2.zero;
+            bool posicaoValida = false;
+
+            for (int tentativa = 0; tentativa < tentativasMaximas; tentativa++)
+            {
+                pos = new Vector2(Random.Range(xMin, xMax), Random.Range(yMin, yMax));
+
+                if (playerTransform == null || Vector2.Distance(pos, playerTransform.position) >= distanciaMinimaDaPlayer)
+                {
+                    posicaoValida = true;
+                    break;
+                }
+            }
+
+            if (!posicaoValida)
+                Debug.LogWarning($"{name}: não encontrou posição longe o suficiente do player após {tentativasMaximas} tentativas — spawnando mesmo assim.");
+
             contagem += InstanciarInimigo(sala, pos);
         }
         return contagem;

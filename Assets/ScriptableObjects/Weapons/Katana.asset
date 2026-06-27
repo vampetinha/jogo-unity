@@ -10,26 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f56f9d0edbd24a43b0a98ed959972a0, type: 3}
-  m_Name: Arma1_Pistola
+  m_Name: Katana
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  nomeArma: Pistola
-  sprite: {fileID: 4563001956290652025, guid: da1f064dd4f6c9f488dfe397df1b064e, type: 3}
+  nomeArma: Katana
+  sprite: {fileID: 4089796923838250065, guid: 65d3f67141d05174e8edd0b9e1412b60, type: 3}
   escalaNaMao: 0.3
-  somDisparo: {fileID: 8300000, guid: dc418cbc2f2874643aef081c12046ba4, type: 3}
-  tipoAtaque: 0
-  prefabProjetil: {fileID: 6325540760539372129, guid: 8507099c7e9811343a75368c1404727b, type: 3}
+  somDisparo: {fileID: 0}
+  tipoAtaque: 4
+  prefabProjetil: {fileID: 0}
   spriteProjetil: {fileID: 0}
-  dano: 50
-  velocidadeProjetil: 14
-  alcance: 9
+  dano: 25
+  velocidadeProjetil: 12
+  alcance: 3
   atravessaInimigos: 0
-  intervaloDisparo: 0.2
+  intervaloDisparo: 0.25
   quantidadeProjeteis: 5
   dispersao: 30
-  dispersaoAleatoria: 5
-  forcaRecuo: 6
-  shakeIntensidade: 0.3
-  shakeDuracao: 0.15
-  raioAtaqueMelee: 2
+  raioAtaqueMelee: 1.6
   anguloAtaqueMelee: 120
   forcaKnockback: 12
