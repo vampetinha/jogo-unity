@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7262228685679387573}
   - component: {fileID: 407276019432589840}
   m_Layer: 7
-  m_Name: InimigoMelee 2
+  m_Name: zumbi
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58be2687a255388498cb110b50dd75d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
-  vidaMaxima: 60
+  vidaMaxima: 90
   morteManual: 0
   aoReceberDano:
     m_PersistentCalls:

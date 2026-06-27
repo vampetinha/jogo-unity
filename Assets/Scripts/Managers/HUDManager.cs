@@ -18,7 +18,7 @@ public class HUDManager : MonoBehaviour
     public string nomeCenaPrincipal = "FaseTerra";
 
     [Tooltip("Scene do menu principal (botão Menu Principal vai para cá)")]
-    public string nomeSceneMenu = "MenuPrincipal";
+    public string nomeSceneMenu = "MenuNovo";
 
     [Tooltip("Fonte usada em todos os textos do HUD (opcional)")]
     public TMP_FontAsset fonte;

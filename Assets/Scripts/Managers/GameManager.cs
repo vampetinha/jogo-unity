@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 /// <summary>
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        GarantirEventSystem();
         CriarUITransicao();
     }
 
@@ -184,6 +186,16 @@ public class GameManager : MonoBehaviour
         return playerObj != null ? playerObj.GetComponent<HealthSystem>() : null;
     }
 
+    private void GarantirEventSystem()
+    {
+        if (FindObjectOfType<EventSystem>() != null) return;
+
+        GameObject esObj = new GameObject("EventSystem");
+        esObj.AddComponent<EventSystem>();
+        esObj.AddComponent<StandaloneInputModule>();
+        DontDestroyOnLoad(esObj);
+    }
+
     // Cria o Canvas de fade e o texto de nome da dimensão em tempo de execução
     private void CriarUITransicao()
     {
@@ -204,6 +216,7 @@ public class GameManager : MonoBehaviour
         painelObj.transform.SetParent(canvasObj.transform, false);
         imagemFade = painelObj.AddComponent<Image>();
         imagemFade.color = Color.black;
+        imagemFade.raycastTarget = false;
         Esticar(imagemFade.rectTransform);
 
         // Texto do nome da dimensão

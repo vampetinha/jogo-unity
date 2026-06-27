@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7262228685679387573}
   - component: {fileID: 407276019432589840}
   m_Layer: 7
-  m_Name: InimigoMelee
+  m_Name: demonio
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -5936104215893728976, guid: 614f25598c104994a8ab04503f796d22, type: 3}
+  m_Sprite: {fileID: -3150051982167883450, guid: 74efabc96ebab724f9cac1efab9ba8e2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58be2687a255388498cb110b50dd75d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
-  vidaMaxima: 1000
+  vidaMaxima: 90
   morteManual: 0
   aoReceberDano:
     m_PersistentCalls:

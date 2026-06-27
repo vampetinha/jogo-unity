@@ -8317,8 +8317,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
   prefabsInimigos:
-  - {fileID: 5130721117966796335, guid: 4ef35a9a728d29148a2a51ba9b8e6426, type: 3}
-  quantidadeInimigos: 7
+  - {fileID: 5130721117966796335, guid: 67de3df931f964140995aa32aaf3d33b, type: 3}
+  quantidadeInimigos: 5
   margemParedes: 0.8
   portas:
   - {fileID: 720509402}
@@ -16696,8 +16696,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
-  prefabsInimigos: []
-  quantidadeInimigos: 3
+  prefabsInimigos:
+  - {fileID: 5130721117966796335, guid: 67de3df931f964140995aa32aaf3d33b, type: 3}
+  quantidadeInimigos: 4
   margemParedes: 0.8
   portas: []
   portal: {fileID: 0}
@@ -18863,8 +18864,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
-  prefabsInimigos: []
-  quantidadeInimigos: 3
+  prefabsInimigos:
+  - {fileID: 5130721117966796335, guid: 67de3df931f964140995aa32aaf3d33b, type: 3}
+  - {fileID: 5130721117966796335, guid: 871d16d45910c734682dea005b759fcf, type: 3}
+  quantidadeInimigos: 5
   margemParedes: 0.8
   portas: []
   portal: {fileID: 0}
@@ -19154,8 +19157,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357f3afac7f28a94d88f2c15332287e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
-  prefabsInimigos: []
-  quantidadeInimigos: 3
+  prefabsInimigos:
+  - {fileID: 5130721117966796335, guid: 202d38fe71e30c54f96120012a0fb80c, type: 3}
+  quantidadeInimigos: 1
   margemParedes: 0.8
   portas: []
   portal: {fileID: 0}
@@ -22649,8 +22653,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomController
   prefabsInimigos:
-  - {fileID: 5130721117966796335, guid: 4ef35a9a728d29148a2a51ba9b8e6426, type: 3}
-  quantidadeInimigos: 5
+  - {fileID: 5130721117966796335, guid: 871d16d45910c734682dea005b759fcf, type: 3}
+  quantidadeInimigos: 2
   margemParedes: 0.8
   portas:
   - {fileID: 1837375542}
@@ -23026,7 +23030,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HUDManager
   nomeCenaPrincipal: FaseTerra
-  nomeSceneMenu: MenuPrincipal
+  nomeSceneMenu: MenuNovo
   fonte: {fileID: 0}
 --- !u!4 &9901000003
 Transform:
