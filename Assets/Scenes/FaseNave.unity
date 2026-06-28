@@ -3733,9 +3733,7 @@ MonoBehaviour:
   volumeSFX: 1
   volumeDisparo: 0.085
   volumeMusica: 0.35
-  musicaMenu: {fileID: 0}
-  musicaFase: {fileID: 0}
-  musicaBoss: {fileID: 0}
+  musicasPorCena: []
   fadeDuracaoLoop: 0
   offsetInicioLoop: 0
 --- !u!4 &521374821
@@ -5846,7 +5844,6 @@ MonoBehaviour:
   faseAtual: 1
   vidaAtual: 100
   vidaMaxima: 100
-  moedas: 0
   armaAtual: {fileID: 11400000, guid: ec94c0110577fc04d9a736e8af6798f6, type: 2}
   duracaoFade: 0.6
   fonteTitulo: {fileID: 0}
@@ -7424,6 +7421,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1976050261}
     m_Modifications:
     - target: {fileID: 2643402920578550419, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4689962723422160307, guid: 041b7a7dfaaa18d4aa1749ad2d6a874f, type: 3}
+    - target: {fileID: 2643402920578550419, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
@@ -7448,12 +7449,20 @@ PrefabInstance:
       value: Portal
       objectReference: {fileID: 0}
     - target: {fileID: 9018221106882181648, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9018221106882181648, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9018221106882181648, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.14999962
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 9018221106882181648, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 4
+      value: 3.7
       objectReference: {fileID: 0}
     - target: {fileID: 9018221106882181648, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
       propertyPath: m_LocalPosition.z

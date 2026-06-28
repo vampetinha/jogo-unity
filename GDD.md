@@ -72,13 +72,6 @@ Cada sala segue o ciclo:
 4. **Combate** — ao matar cada inimigo, o contador decresce
 5. **Sala limpa** — portas abrem e o portal aparece (na última sala)
 
-### 3.5 Moedas
-
-- Inimigos dropam moedas ao morrer
-- Total exibido no HUD (canto superior direito)
-- Moedas acumulam durante toda a run
-- Total exibido na tela de vitória
-
 ---
 
 ## 4. Inimigos
@@ -146,7 +139,6 @@ O boss possui **duas fases** baseadas em porcentagem de vida:
 |---|---|---|
 | Barra de vida | Superior esquerdo | Verde → Amarelo → Vermelho conforme HP cai |
 | Ícone da arma | Abaixo da vida | Mostra o sprite da arma equipada |
-| Contador de moedas | Superior direito | Total acumulado |
 | Barra de calor | Inferior direito | Visível apenas com lança-chamas |
 | Barra do boss | Centro inferior | Aparece somente na sala do boss (roxo → vermelho) |
 
@@ -167,7 +159,7 @@ O boss possui **duas fases** baseadas em porcentagem de vida:
 
 ### Vitória
 - Aparece ao derrotar o boss final
-- Exibe total de moedas coletadas
+- Exibe dimensões conquistadas
 - Botão **Menu Principal** → volta ao MenuNovo
 
 ---

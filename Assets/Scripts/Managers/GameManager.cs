@@ -19,8 +19,6 @@ public class GameManager : MonoBehaviour
     public int       faseAtual  = 1;
     public float     vidaAtual  = 100f;
     public float     vidaMaxima = 100f;
-    public int       moedas     = 0;
-
     [Header("Arma da Fase")]
     [Tooltip("Arma que o jogador receberá ao entrar na próxima cena. Definida pelo PortalController.")]
     public WeaponData armaAtual;
@@ -92,15 +90,11 @@ public class GameManager : MonoBehaviour
         StartCoroutine(TransicaoParaFase(nomeScene));
     }
 
-    /// <summary>Adiciona moedas ao total do jogador.</summary>
-    public void AdicionarMoedas(int quantidade) => moedas += quantidade;
-
     /// <summary>Reinicia o jogo a partir da primeira fase.</summary>
     public void ReiniciarJogo(string nomePrimeiraScene)
     {
         faseAtual  = 1;
         vidaAtual  = vidaMaxima;
-        moedas     = 0;
         armaAtual  = null;
         IrParaFase(nomePrimeiraScene, "");
     }

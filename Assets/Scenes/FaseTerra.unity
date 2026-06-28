@@ -11936,7 +11936,6 @@ MonoBehaviour:
   faseAtual: 1
   vidaAtual: 100
   vidaMaxima: 100
-  moedas: 0
   armaAtual: {fileID: 0}
   duracaoFade: 0.6
   fonteTitulo: {fileID: 0}
@@ -18303,9 +18302,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 55533946}
     m_Modifications:
+    - target: {fileID: 2643402920578550419, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4689962723422160307, guid: 041b7a7dfaaa18d4aa1749ad2d6a874f, type: 3}
     - target: {fileID: 3634252832944685711, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
       propertyPath: m_Name
       value: Portal
+      objectReference: {fileID: 0}
+    - target: {fileID: 9018221106882181648, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9018221106882181648, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 9018221106882181648, guid: 599f61134c1b6e74a9c56ce04d69b342, type: 3}
       propertyPath: m_LocalPosition.x

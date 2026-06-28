@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 8477490820108435077}
   - component: {fileID: 2211214743078115535}
   - component: {fileID: 2802256718783301996}
-  - component: {fileID: 7262228685679387573}
   - component: {fileID: 407276019432589840}
+  - component: {fileID: -3869052532552160369}
   m_Layer: 7
   m_Name: boss final
   m_TagString: Enemy
@@ -180,22 +180,6 @@ MonoBehaviour:
   aoMorrer:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7262228685679387573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5130721117966796335}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 791417bdfc580a546bfe7bfa7eb27211, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyController
-  velocidade: 2.5
-  distanciaDeAtaque: 1.2
-  danoDeAtaque: 30
-  intervaloDeAtaque: 1
 --- !u!114 &407276019432589840
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,3 +196,34 @@ MonoBehaviour:
   duracaoFlash: 0.1
   numeroFlashes: 2
   somDano: {fileID: 0}
+--- !u!114 &-3869052532552160369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130721117966796335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0917f1faf3a93840aa968a1f844e2b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BossController
+  nomeBoss: O Vazio
+  velocidadeFase1: 2
+  alcanceMelee: 1.5
+  danoMelee: 30
+  intervaloMelee: 1.2
+  velocidadeAvanco: 7
+  duracaoAvanco: 0.25
+  intervaloAvanco: 5
+  velocidadeFase2: 2.5
+  distanciaIdeal: 0.2
+  prefabProjetil: {fileID: 5130721117966796335, guid: 208457cb81cb6934eada99e3ab679d01, type: 3}
+  danoProjetil: 20
+  velocidadeProjetil: 6
+  alcanceProjetil: 7
+  intervaloSpread: 2
+  intervaloRafaga: 6
+  quantidadeRafaga: 8
+  prefabVFXMorte: {fileID: 0}
+  delayVitoria: 1

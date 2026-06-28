@@ -80,8 +80,7 @@ public class MainMenuController : MonoBehaviour
         {
             GameManager.Instance.faseAtual = 1;
             GameManager.Instance.vidaAtual = GameManager.Instance.vidaMaxima;
-            GameManager.Instance.moedas = 0;
-            GameManager.Instance.armaAtual = null;
+GameManager.Instance.armaAtual = null;
         }
 
         // Posição base do título para animação

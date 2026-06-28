@@ -62,9 +62,10 @@ public class BossController : MonoBehaviour
 
     void Awake()
     {
-        rb              = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 0f;
-        rb.angularDamping = 1000f;
+        rb                  = GetComponent<Rigidbody2D>();
+        rb.gravityScale     = 0f;
+        rb.angularDamping   = 0f;
+        rb.constraints      = RigidbodyConstraints2D.FreezeRotation;
         vida = GetComponent<HealthSystem>();
         sr   = GetComponent<SpriteRenderer>();
         sala = GetComponentInParent<RoomController>();
@@ -72,12 +73,15 @@ public class BossController : MonoBehaviour
 
     void Start()
     {
-        // Morte manual: o boss controla o próprio Destroy (precisa da animação)
         vida.morteManual = true;
         vida.aoMorrer.AddListener(IniciarMorte);
         vida.aoReceberDano.AddListener(VerificarTransicao);
 
         HUDManager.Instance?.MostrarBarraBoss(nomeBoss, vida);
+
+        // Ativa automaticamente se não houver RoomController controlando o boss
+        if (sala == null || sala.boss != this)
+            AtivarBoss();
     }
 
     // ── API pública ──────────────────────────────────────────────────
@@ -149,24 +153,24 @@ public class BossController : MonoBehaviour
         float   dist = dir.magnitude;
         dir.Normalize();
 
-        // Gira para o jogador
+        // Gira para o jogador (via transform, não física)
         float angulo = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
-        rb.MoveRotation(angulo);
+        transform.rotation = Quaternion.Euler(0f, 0f, angulo);
 
         if (Estado == FaseBoss.Fase1)
         {
             rb.linearVelocity = dist > alcanceMelee
                 ? dir * velocidadeFase1
-                : Vector2.Lerp(rb.linearVelocity, Vector2.zero, 0.3f);
+                : Vector2.zero;
         }
         else if (Estado == FaseBoss.Fase2)
         {
             if (dist < distanciaIdeal * 0.7f)
-                rb.linearVelocity = -dir * velocidadeFase2;  // recua
+                rb.linearVelocity = -dir * velocidadeFase2;
             else if (dist > distanciaIdeal * 1.3f)
-                rb.linearVelocity =  dir * velocidadeFase2;  // avança
+                rb.linearVelocity =  dir * velocidadeFase2;
             else
-                rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, Vector2.zero, 0.2f);
+                rb.linearVelocity = Vector2.zero;
         }
     }
 

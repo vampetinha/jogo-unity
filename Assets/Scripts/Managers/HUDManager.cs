@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// Gerencia todo o HUD do jogo: barra de vida, moedas, Game Over e Vitória.
+/// Gerencia todo o HUD do jogo: barra de vida, Game Over e Vitória.
 /// Crie um GameObject "HUDManager" na primeira cena e adicione este script.
 /// Ele persiste entre cenas — não precisa ser recriado.
 /// </summary>
@@ -25,8 +25,7 @@ public class HUDManager : MonoBehaviour
 
     // ── Componentes criados em código ───────────────────────────────
     private Image    imagemFillVida;
-    private TMP_Text textoMoedas;
-    private TMP_Text textoMoedasVitoria;
+    private TMP_Text textoFasesVitoria;
     private GameObject painelGameOver;
     private GameObject painelVitoria;
 
@@ -142,9 +141,6 @@ public class HUDManager : MonoBehaviour
 
     void Update()
     {
-        if (textoMoedas != null && GameManager.Instance != null)
-            textoMoedas.text = $"Moedas: {GameManager.Instance.moedas}";
-
         if (containerCalor != null && armaConectada != null)
             containerCalor.SetActive(armaConectada.armaAtual?.tipoAtaque == TipoAtaque.LancaChamas);
 
@@ -166,15 +162,18 @@ public class HUDManager : MonoBehaviour
     {
         AudioManager.Instance?.StopSFXLoop();
         AudioManager.Instance?.StopMusica();
+        OcultarBarraBoss();
         if (painelGameOver != null) painelGameOver.SetActive(true);
         Time.timeScale = 0f;
     }
 
-    /// <summary>Exibe a tela de Vitória e pausa o jogo.</summary>
+    /// <summary>Exibe a tela de conclusão do jogo e pausa.</summary>
     public void MostrarVitoria()
     {
-        if (textoMoedasVitoria != null && GameManager.Instance != null)
-            textoMoedasVitoria.text = $"Moedas coletadas: {GameManager.Instance.moedas}";
+        AudioManager.Instance?.StopSFXLoop();
+        AudioManager.Instance?.StopMusica();
+        if (textoFasesVitoria != null && GameManager.Instance != null)
+            textoFasesVitoria.text = $"Dimensões conquistadas: {GameManager.Instance.faseAtual}";
         if (painelVitoria != null) painelVitoria.SetActive(true);
         Time.timeScale = 0f;
     }
@@ -250,7 +249,6 @@ public class HUDManager : MonoBehaviour
 
         CriarBarraDeVida(containerHUD);
         CriarIconeArma(containerHUD);
-        // CriarContadorMoedas(containerHUD);
         CriarBarraDeCalor(containerHUD);
         CriarBarraBoss(canvasObj);
         CriarPainelGameOver(canvasObj);
@@ -430,27 +428,6 @@ public class HUDManager : MonoBehaviour
         rtFill.offsetMax = new Vector2(-4f, -4f);
     }
 
-    // ── Contador de moedas ───────────────────────────────────────────
-
-    private void CriarContadorMoedas(GameObject canvas)
-    {
-        GameObject obj      = new GameObject("TextoMoedas");
-        obj.transform.SetParent(canvas.transform, false);
-        textoMoedas         = obj.AddComponent<TextMeshProUGUI>();
-        textoMoedas.text    = "Moedas: 0";
-        textoMoedas.fontSize = 22f;
-        textoMoedas.color   = new Color(1f, 0.88f, 0.15f);
-        textoMoedas.alignment = TextAlignmentOptions.Right;
-        if (fonte != null) textoMoedas.font = fonte;
-
-        RectTransform rt  = textoMoedas.rectTransform;
-        rt.anchorMin      = new Vector2(1f, 1f);
-        rt.anchorMax      = new Vector2(1f, 1f);
-        rt.pivot          = new Vector2(1f, 1f);
-        rt.anchoredPosition = new Vector2(-20f, -20f);
-        rt.sizeDelta      = new Vector2(200f, 38f);
-    }
-
     // ── Painel de Game Over ──────────────────────────────────────────
 
     private void CriarPainelGameOver(GameObject canvas)
@@ -463,10 +440,17 @@ public class HUDManager : MonoBehaviour
         CriarBotao(painelGameOver, "Reiniciar", new Vector2(0f, -10f), () =>
         {
             Time.timeScale = 1f;
+            string cenaAtual = SceneManager.GetActiveScene().name;
             if (GameManager.Instance != null)
-                GameManager.Instance.ReiniciarJogo(nomeCenaPrincipal);
+            {
+                GameManager.Instance.vidaAtual  = GameManager.Instance.vidaMaxima;
+                GameManager.Instance.armaAtual  = null;
+                GameManager.Instance.IrParaFase(cenaAtual, "");
+            }
             else
-                SceneManager.LoadScene(nomeCenaPrincipal);
+            {
+                SceneManager.LoadScene(cenaAtual);
+            }
         });
 
         CriarBotao(painelGameOver, "Menu Principal", new Vector2(0f, -80f), () =>
@@ -478,25 +462,67 @@ public class HUDManager : MonoBehaviour
         painelGameOver.SetActive(false);
     }
 
-    // ── Painel de Vitória ────────────────────────────────────────────
+    // ── Painel de Vitória / Conclusão ───────────────────────────────
 
     private void CriarPainelVitoria(GameObject canvas)
     {
-        painelVitoria = CriarOverlay(canvas, "PainelVitoria");
+        painelVitoria = new GameObject("PainelVitoria");
+        painelVitoria.transform.SetParent(canvas.transform, false);
+        Image bg = painelVitoria.AddComponent<Image>();
+        bg.color = new Color(0.03f, 0.03f, 0.12f, 0.95f);
+        Esticar(bg.rectTransform);
 
-        AdicionarTexto(painelVitoria, "VITÓRIA!",
-            new Color(1f, 0.85f, 0.1f), 72f, new Vector2(0f, 110f));
+        // Faixa dourada no topo
+        GameObject faixaObj = new GameObject("FaixaTopo");
+        faixaObj.transform.SetParent(painelVitoria.transform, false);
+        Image faixa = faixaObj.AddComponent<Image>();
+        faixa.color = new Color(1f, 0.75f, 0f, 0.9f);
+        RectTransform rtF = faixa.rectTransform;
+        rtF.anchorMin        = new Vector2(0f, 1f);
+        rtF.anchorMax        = new Vector2(1f, 1f);
+        rtF.pivot            = new Vector2(0.5f, 1f);
+        rtF.anchoredPosition = Vector2.zero;
+        rtF.sizeDelta        = new Vector2(0f, 6f);
 
-        // Texto de moedas — guardamos a referência para atualizar ao exibir
-        GameObject moedasObj = AdicionarTexto(painelVitoria, "Moedas coletadas: 0",
-            Color.white, 28f, new Vector2(0f, 30f));
-        textoMoedasVitoria = moedasObj.GetComponent<TMP_Text>();
+        AdicionarTexto(painelVitoria, "JOGO CONCLUÍDO",
+            new Color(1f, 0.85f, 0.1f), 68f, new Vector2(0f, 130f));
 
-        CriarBotao(painelVitoria, "Menu Principal", new Vector2(0f, -60f), () =>
+        AdicionarTexto(painelVitoria, "Você derrotou todos os inimigos!",
+            new Color(0.85f, 0.85f, 1f), 26f, new Vector2(0f, 60f));
+
+        // Separador dourado
+        GameObject sepObj = new GameObject("Separador");
+        sepObj.transform.SetParent(painelVitoria.transform, false);
+        Image sep = sepObj.AddComponent<Image>();
+        sep.color = new Color(1f, 0.75f, 0f, 0.4f);
+        RectTransform rtS = sep.rectTransform;
+        rtS.anchorMin        = new Vector2(0.5f, 0.5f);
+        rtS.anchorMax        = new Vector2(0.5f, 0.5f);
+        rtS.pivot            = new Vector2(0.5f, 0.5f);
+        rtS.anchoredPosition = new Vector2(0f, 10f);
+        rtS.sizeDelta        = new Vector2(500f, 2f);
+
+        GameObject fasesObj = AdicionarTexto(painelVitoria, "Dimensões conquistadas: 0",
+            Color.white, 24f, new Vector2(0f, -30f));
+        textoFasesVitoria = fasesObj.GetComponent<TMP_Text>();
+
+        CriarBotao(painelVitoria, "Menu Principal", new Vector2(0f, -120f), () =>
         {
             Time.timeScale = 1f;
             SceneManager.LoadScene(nomeSceneMenu);
         });
+
+        // Faixa dourada na base
+        GameObject faixaBase = new GameObject("FaixaBase");
+        faixaBase.transform.SetParent(painelVitoria.transform, false);
+        Image faixaB = faixaBase.AddComponent<Image>();
+        faixaB.color = new Color(1f, 0.75f, 0f, 0.9f);
+        RectTransform rtFB = faixaB.rectTransform;
+        rtFB.anchorMin        = new Vector2(0f, 0f);
+        rtFB.anchorMax        = new Vector2(1f, 0f);
+        rtFB.pivot            = new Vector2(0.5f, 0f);
+        rtFB.anchoredPosition = Vector2.zero;
+        rtFB.sizeDelta        = new Vector2(0f, 6f);
 
         painelVitoria.SetActive(false);
     }
