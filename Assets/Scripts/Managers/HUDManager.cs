@@ -250,7 +250,7 @@ public class HUDManager : MonoBehaviour
 
         CriarBarraDeVida(containerHUD);
         CriarIconeArma(containerHUD);
-        CriarContadorMoedas(containerHUD);
+        // CriarContadorMoedas(containerHUD);
         CriarBarraDeCalor(containerHUD);
         CriarBarraBoss(canvasObj);
         CriarPainelGameOver(canvasObj);

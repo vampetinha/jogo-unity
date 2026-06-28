@@ -307,11 +307,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   volumeSFX: 1
-  volumeMusica: 0.35
-  musicaMenu: {fileID: 0}
-  musicaFase: {fileID: 0}
-  musicaBoss: {fileID: 0}
-  fadeDuracaoLoop: 0.06
+  volumeDisparo: 0.5
+  volumeMusica: 0.665
+  musicasPorCena:
+  - cena: {fileID: 102900000, guid: be557a87f6f4d2a49a1ffbc1bf937fee, type: 3}
+    nomeCena: MenuNovo
+    musica: {fileID: 8300000, guid: c7c8e557840fe6b4a8752f17f0140a58, type: 3}
+    volume: 0.912
+  - cena: {fileID: 102900000, guid: 9bbeeeb39dce4a54786b3cc435b05fd7, type: 3}
+    nomeCena: FaseTerra
+    musica: {fileID: 8300000, guid: 02f8c1050890e2249bd0fd9373ca8adc, type: 3}
+    volume: 0.41
+  - cena: {fileID: 102900000, guid: 30e01ec53a5259d499259af45870e0f2, type: 3}
+    nomeCena: FaseGelo
+    musica: {fileID: 8300000, guid: a120e2268672ccd40ae7b7224a45c19f, type: 3}
+    volume: 0.538
+  - cena: {fileID: 102900000, guid: c8f4b7dca621a76498944f5938f73d2e, type: 3}
+    nomeCena: FaseNave
+    musica: {fileID: 8300000, guid: 51b2e7a63cc52774db46e15ea195cd9a, type: 3}
+    volume: 0.544
+  - cena: {fileID: 102900000, guid: 282ae75f2103d514e88e2c794fe01f2f, type: 3}
+    nomeCena: FaseGalaxia
+    musica: {fileID: 8300000, guid: d603f8890271e9f428d6256cc2eacf2e, type: 3}
+    volume: 0.522
+  fadeDuracaoLoop: 0.028
   offsetInicioLoop: 0
 --- !u!4 &224136141
 Transform:

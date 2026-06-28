@@ -18198,7 +18198,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   volumeSFX: 1
-  volumeMusica: 0.35
+  volumeDisparo: 0.5
+  volumeMusica: 0.035
   musicaMenu: {fileID: 0}
   musicaFase: {fileID: 0}
   musicaBoss: {fileID: 0}

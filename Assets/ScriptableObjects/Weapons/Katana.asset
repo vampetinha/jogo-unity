@@ -15,7 +15,8 @@ MonoBehaviour:
   nomeArma: Katana
   sprite: {fileID: 4089796923838250065, guid: 65d3f67141d05174e8edd0b9e1412b60, type: 3}
   escalaNaMao: 0.3
-  somDisparo: {fileID: 0}
+  somDisparo: {fileID: 8300000, guid: 8e6a8f1da98218345b05a10e7a51af22, type: 3}
+  delayAudio: 0
   tipoAtaque: 4
   prefabProjetil: {fileID: 0}
   spriteProjetil: {fileID: 0}
@@ -30,6 +31,31 @@ MonoBehaviour:
   forcaRecuo: 6
   shakeIntensidade: 0.3
   shakeDuracao: 0.15
+  usarTrail: 1
+  corTrailInicio: {r: 0.4, g: 0.8, b: 1, a: 1}
+  corTrailFim: {r: 0.1, g: 0.4, b: 1, a: 0}
+  larguraTrail: 0.12
+  tempoTrail: 0.12
+  usarParticulasBuracoNegro: 0
+  corParticula: {r: 0.55, g: 0, b: 1, a: 1}
+  corParticula2: {r: 0, g: 0.2, b: 1, a: 1}
+  velocidadeRotacaoParticula: 90
+  rotacaoParticula: 0
+  raioBuracoNegro: 0.25
+  velocidadeOrbital: 270
+  emissaoParticulas: 10
+  maxParticulas: 40
+  tamanhoMinParticula: 0.07
+  tamanhoMaxParticula: 0.12
+  vidaMinParticula: 0.7
+  vidaMaxParticula: 1.1
+  comprimentoArco: 0.18
+  escalaArco: 1
+  forcaCentro: 1.5
+  usarSucaoImpacto: 0
+  raioSucao: 3
+  forcaSucao: 18
+  duracaoSucao: 1.2
   raioAtaqueMelee: 1.6
   anguloAtaqueMelee: 150
   forcaKnockback: 12

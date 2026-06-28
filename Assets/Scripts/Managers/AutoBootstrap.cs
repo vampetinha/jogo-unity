@@ -15,6 +15,10 @@ public class AutoBootstrap : MonoBehaviour
     [Tooltip("Arraste o WeaponData da arma que o player deve usar nesta fase.")]
     public WeaponData armaInicial;
 
+    [Header("Música desta cena")]
+    [Tooltip("Música tocada enquanto o player estiver nesta cena.")]
+    public AudioClip musicaDaCena;
+
     void Awake()
     {
         if (GameManager.Instance == null)
@@ -34,12 +38,13 @@ public class AutoBootstrap : MonoBehaviour
 
     void Start()
     {
-        // Só aplica a arma inicial se o GameManager não tiver uma arma definida
-        // (ou seja, o player entrou direto nessa cena sem passar pelo portal)
         if (armaInicial != null && GameManager.Instance != null && GameManager.Instance.armaAtual == null)
         {
             GameManager.Instance.armaAtual = armaInicial;
             GameManager.Instance.AplicarArmaPublico();
         }
+
+        if (musicaDaCena != null)
+            AudioManager.Instance?.PlayMusica(musicaDaCena);
     }
 }

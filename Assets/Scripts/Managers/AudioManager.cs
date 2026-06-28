@@ -1,35 +1,52 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
-/// <summary>
-/// Singleton de áudio. Crie um GameObject "AudioManager" na scene MenuPrincipal
-/// e adicione este script — ele persiste em todas as fases.
-/// Use AudioManager.Instance.PlaySFX(clip) e PlayMusica(clip) em qualquer lugar.
-/// </summary>
+[System.Serializable]
+public class MusicaCena
+{
+#if UNITY_EDITOR
+    public SceneAsset cena;
+#endif
+    [HideInInspector] public string nomeCena;
+    public AudioClip  musica;
+    [Range(0f, 1f)] public float volume = 1f;
+}
+
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
+    // ── Volumes globais ──────────────────────────────────────────────
     [Header("Volume Global")]
-    [Range(0f, 1f)] public float volumeSFX      = 1f;
-    [Range(0f, 1f)] public float volumeDisparo  = 0.5f;
-    [Range(0f, 1f)] public float volumeMusica   = 0.35f;
+    [Range(0f, 1f)] public float volumeSFX     = 1f;
+    [Range(0f, 1f)] public float volumeDisparo = 0.5f;
+    [Range(0f, 1f)] public float volumeMusica  = 0.35f;
 
-    [Header("Músicas (opcional)")]
-    public AudioClip musicaMenu;
-    public AudioClip musicaFase;
-    public AudioClip musicaBoss;
+    // ── Música por cena ──────────────────────────────────────────────
+    [Header("Música por Cena")]
+    public MusicaCena[] musicasPorCena;
 
-    [Header("Fade do Loop (metralhadora)")]
+    // ── Loop de SFX (metralhadora) ───────────────────────────────────
+    [Header("Loop de SFX")]
     [Range(0f, 0.3f)] public float fadeDuracaoLoop  = 0.06f;
-    [Tooltip("Segundos a pular no início do clipe de loop (remove silêncio inicial)")]
     [Range(0f, 1f)]   public float offsetInicioLoop = 0f;
 
-    private AudioSource sfxSource;
+    // ── Privados ─────────────────────────────────────────────────────
     private AudioSource musicaSource;
+    private AudioSource sfxSource;
     private AudioSource sfxLoopSource;
-    private Coroutine   fadeLoopCoroutine;
-    private Coroutine   loopManualCoroutine;
+
+    private Coroutine fadeLoopCoroutine;
+    private Coroutine loopManualCoroutine;
+
+    private float  volumeCenaAtual = 1f;
+    private string ultimaCena      = "";
+
+    // ────────────────────────────────────────────────────────────────
 
     void Awake()
     {
@@ -37,67 +54,72 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // SFX: one-shot sem loop
-        sfxSource             = gameObject.AddComponent<AudioSource>();
-        sfxSource.playOnAwake = false;
-        sfxSource.loop        = false;
+        sfxSource             = CriarAudioSource(loop: false);
+        sfxLoopSource         = CriarAudioSource(loop: true);
+        musicaSource          = CriarAudioSource(loop: true);
+        musicaSource.volume   = volumeMusica;
 
-        // SFX em loop (ex: metralhadora)
-        sfxLoopSource             = gameObject.AddComponent<AudioSource>();
-        sfxLoopSource.playOnAwake = false;
-        sfxLoopSource.loop        = true;
-
-        // Música: loop contínuo
-        musicaSource             = gameObject.AddComponent<AudioSource>();
-        musicaSource.loop        = true;
-        musicaSource.playOnAwake = false;
-        musicaSource.volume      = volumeMusica;
+        SincronizarNomesCena(); // garante nomeCena populado no editor
     }
 
-    // ── API pública ──────────────────────────────────────────────────
+    void OnValidate()
+    {
+        SincronizarNomesCena();
+    }
 
-    /// <summary>Toca um efeito sonoro pontual (não bloqueia a música).</summary>
+    void Update()
+    {
+        // Troca música automaticamente ao mudar de cena
+        string cenaAtual = SceneManager.GetActiveScene().name;
+        if (cenaAtual != ultimaCena)
+        {
+            ultimaCena = cenaAtual;
+            AplicarMusicaDaCena(cenaAtual);
+        }
+
+        // Mantém volume da música sempre sincronizado com os sliders
+        if (musicaSource != null)
+            musicaSource.volume = volumeMusica * volumeCenaAtual;
+    }
+
+    // ── Música ───────────────────────────────────────────────────────
+
+    public void PlayMusica(AudioClip clip)
+    {
+        if (clip == null) { musicaSource.Stop(); return; }
+        if (musicaSource.clip == clip && musicaSource.isPlaying) return;
+        musicaSource.clip   = clip;
+        musicaSource.volume = volumeMusica * volumeCenaAtual;
+        musicaSource.Play();
+    }
+
+    public void StopMusica() => musicaSource.Stop();
+
+    // ── SFX ──────────────────────────────────────────────────────────
+
     public void PlaySFX(AudioClip clip, float escala = 1f)
     {
         if (clip == null) return;
         sfxSource.PlayOneShot(clip, Mathf.Clamp01(escala * volumeSFX));
     }
 
-    /// <summary>Toca som de disparo com volume independente.</summary>
     public void PlaySFXDisparo(AudioClip clip)
     {
         if (clip == null) return;
         sfxSource.PlayOneShot(clip, Mathf.Clamp01(volumeDisparo));
     }
 
-    public void SetVolumeDisparo(float v) => volumeDisparo = Mathf.Clamp01(v);
+    // ── SFX Loop ─────────────────────────────────────────────────────
 
-    /// <summary>Troca a música de fundo em loop.</summary>
-    public void PlayMusica(AudioClip clip)
-    {
-        if (clip == null) { StopMusica(); return; }
-        if (musicaSource.clip == clip && musicaSource.isPlaying) return;
-        musicaSource.clip   = clip;
-        musicaSource.volume = volumeMusica;
-        musicaSource.Play();
-    }
-
-    public void StopMusica() => musicaSource.Stop();
-
-    /// <summary>
-    /// Inicia um SFX em loop. Se delayEntreLoops > 0, toca o clip uma vez,
-    /// aguarda o delay e repete — criando uma pausa entre cada iteração.
-    /// </summary>
     public void PlaySFXLoop(AudioClip clip, float delayEntreLoops = 0f)
     {
         if (clip == null) return;
-
-        if (fadeLoopCoroutine  != null) StopCoroutine(fadeLoopCoroutine);
+        if (fadeLoopCoroutine   != null) StopCoroutine(fadeLoopCoroutine);
         if (loopManualCoroutine != null) StopCoroutine(loopManualCoroutine);
 
         if (delayEntreLoops > 0f)
         {
-            sfxLoopSource.loop = false;
+            sfxLoopSource.loop  = false;
             loopManualCoroutine = StartCoroutine(LoopComDelay(clip, delayEntreLoops));
         }
         else
@@ -112,18 +134,51 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    /// <summary>Para o loop (com ou sem delay) com fade out suave.</summary>
     public void StopSFXLoop()
     {
-        if (loopManualCoroutine != null)
-        {
-            StopCoroutine(loopManualCoroutine);
-            loopManualCoroutine = null;
-        }
-
+        if (loopManualCoroutine != null) { StopCoroutine(loopManualCoroutine); loopManualCoroutine = null; }
         if (!sfxLoopSource.isPlaying) return;
         if (fadeLoopCoroutine != null) StopCoroutine(fadeLoopCoroutine);
         fadeLoopCoroutine = StartCoroutine(FadeOutAndStop());
+    }
+
+    // ── Setters de volume ────────────────────────────────────────────
+
+    public void SetVolumeSFX(float v)     => volumeSFX     = Mathf.Clamp01(v);
+    public void SetVolumeDisparo(float v) => volumeDisparo = Mathf.Clamp01(v);
+    public void SetVolumeMusica(float v)  => volumeMusica  = Mathf.Clamp01(v);
+
+    // ── Internos ─────────────────────────────────────────────────────
+
+    private void AplicarMusicaDaCena(string nomeCena)
+    {
+        if (musicasPorCena == null) return;
+        foreach (var e in musicasPorCena)
+        {
+            if (e == null || e.musica == null) continue;
+            if (e.nomeCena != nomeCena) continue;
+            volumeCenaAtual = e.volume;
+            PlayMusica(e.musica);
+            return;
+        }
+    }
+
+    private void SincronizarNomesCena()
+    {
+#if UNITY_EDITOR
+        if (musicasPorCena == null) return;
+        foreach (var e in musicasPorCena)
+            if (e != null && e.cena != null)
+                e.nomeCena = e.cena.name;
+#endif
+    }
+
+    private AudioSource CriarAudioSource(bool loop)
+    {
+        var src        = gameObject.AddComponent<AudioSource>();
+        src.playOnAwake = false;
+        src.loop        = loop;
+        return src;
     }
 
     private IEnumerator LoopComDelay(AudioClip clip, float delay)
@@ -133,7 +188,6 @@ public class AudioManager : MonoBehaviour
             sfxLoopSource.clip   = clip;
             sfxLoopSource.volume = volumeDisparo;
             sfxLoopSource.Play();
-            // espera o clip terminar + o delay antes de tocar novamente
             yield return new WaitForSeconds(clip.length + delay);
         }
     }
@@ -152,26 +206,15 @@ public class AudioManager : MonoBehaviour
 
     private IEnumerator FadeOutAndStop()
     {
-        float volumeInicial = sfxLoopSource.volume;
-        float t = 0f;
+        float inicio = sfxLoopSource.volume;
+        float t      = 0f;
         while (t < fadeDuracaoLoop)
         {
-            sfxLoopSource.volume = Mathf.Lerp(volumeInicial, 0f, t / fadeDuracaoLoop);
+            sfxLoopSource.volume = Mathf.Lerp(inicio, 0f, t / fadeDuracaoLoop);
             t += Time.unscaledDeltaTime;
             yield return null;
         }
         sfxLoopSource.Stop();
-        sfxLoopSource.volume = volumeSFX;
-    }
-
-    public void SetVolumeSFX(float v)
-    {
-        volumeSFX = Mathf.Clamp01(v);
-    }
-
-    public void SetVolumeMusica(float v)
-    {
-        volumeMusica            = Mathf.Clamp01(v);
-        musicaSource.volume     = volumeMusica;
+        sfxLoopSource.volume = volumeDisparo;
     }
 }

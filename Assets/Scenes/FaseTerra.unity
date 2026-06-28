@@ -9544,10 +9544,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   volumeSFX: 1
-  volumeMusica: 0.35
-  musicaMenu: {fileID: 0}
-  musicaFase: {fileID: 0}
-  musicaBoss: {fileID: 0}
+  volumeDisparo: 0.5
+  volumeMusica: 0.264
+  musicasPorCena:
+  - cena: {fileID: 102900000, guid: 9bbeeeb39dce4a54786b3cc435b05fd7, type: 3}
+    nomeCena: FaseTerra
+    musica: {fileID: 8300000, guid: 02f8c1050890e2249bd0fd9373ca8adc, type: 3}
+    volume: 1
   fadeDuracaoLoop: 0
   offsetInicioLoop: 0
 --- !u!4 &1466131215
