@@ -10,26 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f56f9d0edbd24a43b0a98ed959972a0, type: 3}
-  m_Name: Arma4_LancaChamas
+  m_Name: Arma5_RayGun
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  nomeArma: "Lan\xE7a-Chamas"
-  sprite: {fileID: 5635991609229340457, guid: 538111fb61af98d489cb9371eed4ad9a, type: 3}
-  escalaNaMao: 0.5
-  somDisparo: {fileID: 0}
-  tipoAtaque: 3
-  prefabProjetil: {fileID: 0}
+  nomeArma: RayGun
+  sprite: {fileID: -2645485047962771172, guid: 2610509294431b746884826aee08d650, type: 3}
+  escalaNaMao: 2
+  somDisparo: {fileID: 8300000, guid: 8228046a5b733ea48a72d121de753023, type: 3}
+  tipoAtaque: 0
+  prefabProjetil: {fileID: 6325540760539372129, guid: 73d92bcb1f5ccea4abbdab24cc2580f5, type: 3}
   spriteProjetil: {fileID: 0}
-  dano: 25
+  dano: 50
   velocidadeProjetil: 14
   alcance: 9
   atravessaInimigos: 0
-  intervaloDisparo: 0.1
+  intervaloDisparo: 0.2
   quantidadeProjeteis: 5
   dispersao: 30
   dispersaoAleatoria: 5
   forcaRecuo: 6
   shakeIntensidade: 0.3
   shakeDuracao: 0.15
+  usarTrail: 1
+  corTrailInicio: {r: 0.4776926, g: 1, b: 0, a: 0.5803922}
+  corTrailFim: {r: 0, g: 0.6509804, b: 0.35566998, a: 0.8352941}
+  larguraTrail: 0.12
+  tempoTrail: 0.12
   raioAtaqueMelee: 2
   anguloAtaqueMelee: 120
   forcaKnockback: 12

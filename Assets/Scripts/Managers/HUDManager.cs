@@ -44,6 +44,8 @@ public class HUDManager : MonoBehaviour
     private TMP_Text            textoCalorStatus;
     private GameObject          containerCalor;
     private FlamethrowerAttack  lancaChamasConectado;
+    private float               calorAlvoCalor = 1f;
+    private const float         VelocidadeCalorLerp = 6f;
 
     // HUD jogável (oculto no menu principal)
     private GameObject containerHUD;
@@ -140,9 +142,21 @@ public class HUDManager : MonoBehaviour
 
     void Update()
     {
-        // Mantém o contador de moedas sincronizado
         if (textoMoedas != null && GameManager.Instance != null)
             textoMoedas.text = $"Moedas: {GameManager.Instance.moedas}";
+
+        if (containerCalor != null && armaConectada != null)
+            containerCalor.SetActive(armaConectada.armaAtual?.tipoAtaque == TipoAtaque.LancaChamas);
+
+        if (lancaChamasConectado != null && imagemFillCalor != null)
+        {
+            float t = lancaChamasConectado.CalorAtual / Mathf.Max(1f, lancaChamasConectado.CalorMaximo);
+            imagemFillCalor.fillAmount = Mathf.Lerp(imagemFillCalor.fillAmount, t, Time.deltaTime * VelocidadeCalorLerp);
+
+            imagemFillCalor.color = lancaChamasConectado.EmRecarga
+                ? new Color(0.4f, 0.4f, 0.4f)
+                : Color.Lerp(Color.red, new Color(1f, 0.55f, 0f), t);
+        }
     }
 
     // ── API pública ──────────────────────────────────────────────────
@@ -343,27 +357,19 @@ public class HUDManager : MonoBehaviour
         if (imagemFillCalor == null || lancaChamasConectado == null) return;
 
         float t = maximo > 0f ? atual / maximo : 0f;
-        imagemFillCalor.fillAmount = t;
+        calorAlvoCalor = t;
 
         if (lancaChamasConectado.EmRecarga)
         {
-            imagemFillCalor.color = new Color(0.4f, 0.4f, 0.4f);
-            if (textoCalorStatus != null) textoCalorStatus.text = "SUPERAQUECIDO";
+            if (textoCalorStatus != null) textoCalorStatus.text = t >= 1f ? "PRONTO" : "RECARREGANDO";
         }
         else if (lancaChamasConectado.Ativo)
         {
-            imagemFillCalor.color = new Color(1f, 0.25f, 0f);
             if (textoCalorStatus != null) textoCalorStatus.text = "ATIVO";
-        }
-        else if (t <= 0.3f)
-        {
-            imagemFillCalor.color = new Color(1f, 0.1f, 0.1f);
-            if (textoCalorStatus != null) textoCalorStatus.text = "RECARREGANDO";
         }
         else
         {
-            imagemFillCalor.color = new Color(1f, 0.55f, 0f);
-            if (textoCalorStatus != null) textoCalorStatus.text = t >= 1f ? "PRONTO" : "RECARREGANDO";
+            if (textoCalorStatus != null) textoCalorStatus.text = t >= 1f ? "PRONTO" : "";
         }
     }
 

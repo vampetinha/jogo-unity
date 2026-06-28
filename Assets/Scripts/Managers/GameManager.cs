@@ -101,6 +101,7 @@ public class GameManager : MonoBehaviour
         faseAtual  = 1;
         vidaAtual  = vidaMaxima;
         moedas     = 0;
+        armaAtual  = null;
         IrParaFase(nomePrimeiraScene, "");
     }
 
@@ -168,8 +169,10 @@ public class GameManager : MonoBehaviour
     {
         HealthSystem vida = BuscarVidaDoPlayer();
         if (vida == null) return;
-        vida.DefinirVida(vidaAtual, vidaMaxima);
+        vida.DefinirVida(vidaMaxima, vidaMaxima);
     }
+
+    public void AplicarArmaPublico() => AplicarArmaNoPlayer();
 
     private void AplicarArmaNoPlayer()
     {

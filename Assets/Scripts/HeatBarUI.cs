@@ -58,7 +58,6 @@ public class HeatBarUI : MonoBehaviour
 
     void Update()
     {
-        // Suaviza o preenchimento da barra para não pular abruptamente
         if (slider != null)
             slider.value = Mathf.Lerp(slider.value, valorAlvo, Time.deltaTime * velocidadeLerp);
     }

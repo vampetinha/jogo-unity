@@ -26,6 +26,10 @@ MonoBehaviour:
   intervaloDisparo: 0.25
   quantidadeProjeteis: 5
   dispersao: 30
+  dispersaoAleatoria: 5
+  forcaRecuo: 6
+  shakeIntensidade: 0.3
+  shakeDuracao: 0.15
   raioAtaqueMelee: 1.6
-  anguloAtaqueMelee: 120
+  anguloAtaqueMelee: 150
   forcaKnockback: 12

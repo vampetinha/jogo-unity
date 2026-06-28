@@ -14,10 +14,13 @@ public class RoomWallGenerator : MonoBehaviour
 
     [Header("Posicionamento das Colisões de Parede")]
     [Tooltip("Empurra cada parede para dentro da sala. Valor positivo = para dentro.")]
-    public float   insetParedes  = 0f;
+    public float   insetParedes   = 0f;
+    [Tooltip("Empurra cada parede para fora da sala. Valor positivo = para fora.")]
+    public float   outsetParedes  = 0f;
     [Tooltip("Desloca todas as paredes num eixo fixo (X/Y).")]
-    public Vector2 offsetParedes = Vector2.zero;
+    public Vector2 offsetParedes  = Vector2.zero;
     [HideInInspector] public float   insetAplicado  = 0f;
+    [HideInInspector] public float   outsetAplicado = 0f;
     [HideInInspector] public Vector2 offsetAplicado = Vector2.zero;
 
     [Header("Largura da abertura do corredor")]
@@ -119,15 +122,16 @@ public class RoomWallGenerator : MonoBehaviour
         GerarParedes();
     }
 
-    [ContextMenu("Aplicar Inset e Offset nas Paredes Existentes")]
+    [ContextMenu("Aplicar Inset/Outset/Offset nas Paredes Existentes")]
     public void AplicarNasParedes()
     {
         float   deltaInset  = insetParedes  - insetAplicado;
+        float   deltaOutset = outsetParedes - outsetAplicado;
         Vector2 deltaOffset = offsetParedes - offsetAplicado;
 
-        if (Mathf.Approximately(deltaInset, 0f) && deltaOffset == Vector2.zero)
+        if (Mathf.Approximately(deltaInset, 0f) && Mathf.Approximately(deltaOutset, 0f) && deltaOffset == Vector2.zero)
         {
-            Debug.Log($"{name}: inset/offset já estão aplicados.");
+            Debug.Log($"{name}: inset/outset/offset já estão aplicados.");
             return;
         }
 
@@ -140,21 +144,26 @@ public class RoomWallGenerator : MonoBehaviour
             Vector2 pos = filho.localPosition;
 
             if (!Mathf.Approximately(deltaInset, 0f) && pos != Vector2.zero)
-                filho.localPosition += (Vector3)((-pos.normalized) * deltaInset);
+                filho.localPosition += (Vector3)(-pos.normalized * deltaInset);
+
+            if (!Mathf.Approximately(deltaOutset, 0f) && pos != Vector2.zero)
+                filho.localPosition += (Vector3)(pos.normalized * deltaOutset);
 
             filho.localPosition += (Vector3)deltaOffset;
             count++;
         }
 
         insetAplicado  = insetParedes;
+        outsetAplicado = outsetParedes;
         offsetAplicado = offsetParedes;
-        Debug.Log($"{name}: inset {deltaInset:F2} + offset {deltaOffset} aplicados em {count} paredes.");
+        Debug.Log($"{name}: inset {deltaInset:F2} + outset {deltaOutset:F2} + offset {deltaOffset} aplicados em {count} paredes.");
     }
 
-    [ContextMenu("Resetar Inset e Offset das Paredes")]
+    [ContextMenu("Resetar Inset/Outset/Offset das Paredes")]
     public void ResetarNasParedes()
     {
         insetParedes  = 0f;
+        outsetParedes = 0f;
         offsetParedes = Vector2.zero;
         AplicarNasParedes();
     }
@@ -203,6 +212,7 @@ public class RoomWallGenerator : MonoBehaviour
         float w = col.size.x, h = col.size.y, esp = 0.3f;
 
         insetAplicado  = 0f;
+        outsetAplicado = 0f;
         offsetAplicado = Vector2.zero;
 
         GerarLado("Norte", Vector2.up    * h / 2f, new Vector2(w,   esp), aberturaNoRte,  true);

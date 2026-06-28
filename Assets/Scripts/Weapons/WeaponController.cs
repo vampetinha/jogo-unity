@@ -79,7 +79,7 @@ public class WeaponController : MonoBehaviour
 
             case TipoAtaque.Automatico:
                 if (Input.GetMouseButtonDown(0))
-                    AudioManager.Instance?.PlaySFXLoop(armaAtual.somDisparo);
+                    StartCoroutine(TocarSomLoop(armaAtual.somDisparo, armaAtual.delayAudio));
                 if (Input.GetMouseButtonUp(0))
                     AudioManager.Instance?.StopSFXLoop();
                 if (Input.GetMouseButton(0) && timerDisparo <= 0f) Disparar();
@@ -135,7 +135,7 @@ public class WeaponController : MonoBehaviour
 
         ConfigurarProjetil(obj);
         if (armaAtual.tipoAtaque != TipoAtaque.Automatico)
-            AudioManager.Instance?.PlaySFX(armaAtual.somDisparo);
+            StartCoroutine(TocarSomDisparo(armaAtual.somDisparo, armaAtual.delayAudio));
         timerDisparo = armaAtual.intervaloDisparo;
     }
 
@@ -176,7 +176,7 @@ public class WeaponController : MonoBehaviour
         }
 
         CameraFollow.Instance?.Shake(armaAtual.shakeIntensidade, armaAtual.shakeDuracao);
-        AudioManager.Instance?.PlaySFX(armaAtual.somDisparo);
+        StartCoroutine(TocarSomDisparo(armaAtual.somDisparo, armaAtual.delayAudio));
         timerDisparo = armaAtual.intervaloDisparo;
     }
 
@@ -296,12 +296,17 @@ public class WeaponController : MonoBehaviour
     {
         Projectile proj = obj.GetComponent<Projectile>();
         if (proj != null)
+        {
             proj.Configurar(
                 armaAtual.dano,
                 armaAtual.velocidadeProjetil,
                 armaAtual.alcance,
                 armaAtual.atravessaInimigos,
                 armaAtual.spriteProjetil);
+            proj.ConfigurarTrail(armaAtual);
+            proj.ConfigurarParticulas(armaAtual);
+            proj.ConfigurarImpacto(armaAtual);
+        }
     }
 
     private float AnguloParaMouse()
@@ -354,5 +359,17 @@ public class WeaponController : MonoBehaviour
         armaAtual    = novaArma;
         timerDisparo = 0f;
         AtualizarVisual();
+    }
+
+    private System.Collections.IEnumerator TocarSomDisparo(AudioClip clip, float delay)
+    {
+        if (delay > 0f) yield return new WaitForSeconds(delay);
+        AudioManager.Instance?.PlaySFXDisparo(clip);
+    }
+
+    private System.Collections.IEnumerator TocarSomLoop(AudioClip clip, float delay)
+    {
+        AudioManager.Instance?.PlaySFXLoop(clip, delay);
+        yield break;
     }
 }
